@@ -115,6 +115,38 @@ d3.csv("epics.csv", function(error, data) {
       .attr("r", function(d) { return 3+d.Size * d.Size;})
       .attr("cx", xMap)
       .attr("cy", yMap)
+      .style("fill", function(d) {
+        var colorCat;
+        
+        if (d.Urgency < 5 && d.Importance < 5) {
+            colorCat = "#ecff5e";
+        } else if (d.Urgency >= 5 && d.Importance <= 5) {
+            colorCat = "#fa2121";
+        } else if (d.Urgency > 5 && d.Importance > 5) {
+            colorCat = "#217821";
+        } else {
+            colorCat = "#2121be";
+        }
+          
+        return colorCat;
+      
+      }) 
+      .style("stroke", function(d) {
+        var colorCat;
+        
+        if (d.Urgency < 5 && d.Importance < 5) {
+            colorCat = "#ecff5e";
+        } else if (d.Urgency >= 5 && d.Importance <= 5) {
+            colorCat = "#fa2121";
+        } else if (d.Urgency > 5 && d.Importance > 5) {
+            colorCat = "#217821";
+        } else {
+            colorCat = "#2121be";
+        }
+          
+        return colorCat;
+      
+      }) 
       .on("mouseover", function(d) {
           tooltip.transition()
                .duration(200)
