@@ -21,12 +21,18 @@ body {
   stroke: #000;
 }
 
-.tooltip {
-  position: absolute;
-  width: 200px;
-  height: 28px;
-  pointer-events: none;
+.tooltip {   
+  position: absolute;           
+  text-align: center;
+  width: 60px;
+  padding: 5px;             
+  font: 12px Roboto, Helvetica, Arial;        
+  background: #5799db;   
+  border: 0px;      
+  border-radius: 4px;           
+  pointer-events: none;         
 }
+
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -149,12 +155,12 @@ d3.csv("epics.csv", function(error, data) {
       }) 
       .on("mouseover", function(d) {
           tooltip.transition()
-               .duration(200)
+               .duration(400)
                .style("opacity", .9);
-          tooltip.html(d["Cereal Name"] + "<br/> (" + xValue(d) 
-	        + ", " + yValue(d) + ")")
-               .style("left", (d3.event.pageX + 5) + "px")
-               .style("top", (d3.event.pageY - 28) + "px");
+          tooltip.html(d.Epic + "<br/> (" + xValue(d) 
+	        + ", " + yValue(d) + ", " + dotSize(d) + ")")
+               .style("left", (d3.event.pageX - 50) + "px")
+               .style("top", (d3.event.pageY - 60) + "px");
       })
       .on("mouseout", function(d) {
           tooltip.transition()
