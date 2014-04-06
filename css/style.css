@@ -1,21 +1,158 @@
-  #sortable {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      width: 60%;
-  }
-  #sortable li {
-      margin: 0 3px 3px 3px;
-      padding: 0.4em;
-      padding-left: 1.5em;
-      font-size: 1.4em;
-      height: 18px;
-  }
-  #sortable li span {
-      position: absolute;
-      margin-left: -1.3em;
-  }
+/* General styles */
 
-  #sortable li span.rank{
-    margin-left: .4em;
+body {
+    font-family: Roboto, Helvetica, Arial;
+    font-size: .9em;
+    color: #333;
+    margin: 0;
+}
+header {
+    width: 100%;
+    height: 110px;
+    background-color: #5799db;
+    font-family: Roboto, Helvetica, Arial;
+    clear: both;
+}
+.livechart {
+    float: left;
+}
+.ediTable {
+    float: right;
+    margin: 30px 30px 30px 0px;
+    width: 45%;
+    min-width: 300px;
+    max-width: 620px;
+    font-family: Roboto, Helvetica, Arial;
+    font-size: 1.1em;
+    line-height: 1.1em;
+    border-spacing: 0px;
+}
+footer {
+    clear: both;
+    height: 50px;
+    background-color: #5799db;
+    font-family: Roboto, Helvetica, Arial;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    text-align: right;
+    line-height: 50px;
+    padding-right: 40px;
+}
+
+/* Typography */
+
+h1 {
+    font-family: Roboto, Helvetica, Arial;
+    line-height: 70px;
+    vertical-align: middle;
+    font-size: 3.8em;
+    text-align: center;
+    margin: 0 0 0 0;
+    color: #fff;
+}
+h3 {
+    font-family: Roboto, Helvetica, Arial;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0;
+    margin-top: 4px;
+    color: #fff;
+    text-decoration: none;
+}
+#twitter {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Table design */
+
+.ediTable td {
+    padding: 6px 6px 6px 6px;
+}
+.ediTable th {
+    font-size: 1.2em;
+    padding: 6px 6px 6px 6px;
+}
+.ediTable tr {
+    margin-bottom: .5em;
+}
+tr:nth-child(odd) {
+    background-color: #eee;
+}
+tr:nth-child(even) {
+    background-color: #ccc;
+}
+thead tr:nth-child(odd) {
+    background-color: #ccc;
+}
+.ediTable tbody tr:last-child {
+    /* change the text color of the "add a new row" row */
+    color: #999;
+}
+.epic {
+    width: 30%;
+    text-align: left;
+}
+.value {
+    width: 4%;
+    text-align: center;
+}
+
+/* SVG styles */
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+.dot {
+    stroke: #000;
+}
+.axis .domain {
+    stroke: #666;
+}
+.divider .domain {
+    stroke: #666;
+    fill: none;
+}
+
+/* Widget styles */
+
+.tooltip {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    width: 100px;
+    padding: 5px;
+    font-family: Roboto, Helvetica, Arial;
+    font-size: 14px;
+    background: #5799db;
+    border: 0px;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+/* Button styles */
+
+#clear {
+    clear: left;
+}
+#clear,
+#save {
+    float: left;
+    width: 96px;
+    height: 48px;
+    margin: 10px 30px 30px 134px;
+    text-align: center;
+    line-height: 48px;
+    border-radius: 3px;
+    font-family: Roboto, Helvetica, Arial;
+    font-size: 1.2em;
+    background-color: #5799db;
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
 }
