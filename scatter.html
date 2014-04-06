@@ -13,7 +13,7 @@
 
     <style>
         body {
-            font: 11px sans-serif;
+            font: 14px sans-serif;
         }
         .axis path,
         .axis line {
@@ -29,11 +29,49 @@
             text-align: center;
             width: 100px;
             padding: 5px;
-            font: 12px Roboto, Helvetica, Arial;
+            font-family: Arial;
+            font-size: 14px;
             background: #5799db;
             border: 0px;
             border-radius: 4px;
             pointer-events: none;
+        }
+        .livechart {
+            float: left;
+        }
+        .ediTable {
+            margin: 15px 25px 0px 0px;
+            width: 40%;
+            min-width: 300px;
+            float: right;
+            font-family: Roboto, Helvetica, Arial;
+            font-size: 1.1em;
+            line-height: 1.1em;
+            border-spacing:0px;
+        }
+        .ediTable td {
+            padding: 6px 6px 6px 6px;
+        }
+        .ediTable th {
+            font-size:1.2em;
+            padding: 6px 6px 6px 6px;
+        }
+        .ediTable tr {
+            margin-bottom: .5em;
+        }
+        tr:nth-child(odd) {
+            background-color: #ccc;
+        }
+        tr:nth-child(even) {
+            background-color: #eee;
+        }
+        .epic {
+            width: 25%;
+            text-align: left;
+        }
+        .value {
+            width: 5%;
+            text-align: right;
         }
     </style>
 </head>
@@ -55,6 +93,7 @@
         var svg = d3.select("body").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
+            .attr("class", "livechart")
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         /* 
@@ -67,126 +106,126 @@
     <table class='ediTable' contenteditable="true">
         <thead>
             <tr>
-                <th>Epic</th>
-                <th>Importance</th>
-                <th>Urgency</th>
-                <th>Size</th>
+                <th class='epic'>Epic</th>
+                <th class='value'>Importance</th>
+                <th class='value'>Urgency</th>
+                <th class='value'>Size</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Support POD</td>
-                <td>10</td>
-                <td>9</td>
-                <td>3</td>
+                <td class='epic'>Support POD</td>
+                <td class='value'>10</td>
+                <td class='value'>9</td>
+                <td class='value'>3</td>
             </tr>
             <tr>
-                <td>PDF A11y</td>
-                <td>8</td>
-                <td>10</td>
-                <td>5</td>
+                <td class='epic'>PDF A11y</td>
+                <td class='value'>8</td>
+                <td class='value'>10</td>
+                <td class='value'>5</td>
             </tr>
             <tr>
-                <td>Ruby/Rails Upgrade</td>
-                <td>4</td>
-                <td>6</td>
-                <td>5</td>
+                <td class='epic'>Ruby/Rails Upgrade</td>
+                <td class='value'>4</td>
+                <td class='value'>6</td>
+                <td class='value'>5</td>
             </tr>
             <tr>
-                <td>Improve Docs</td>
-                <td>2</td>
-                <td>8</td>
-                <td>1</td>
+                <td class='epic'>Improve Docs</td>
+                <td class='value'>2</td>
+                <td class='value'>8</td>
+                <td class='value'>1</td>
             </tr>
             <tr>
-                <td>PDF Preflight</td>
-                <td>6</td>
-                <td>9</td>
-                <td>3</td>
+                <td class='epic'>PDF Preflight</td>
+                <td class='value'>6</td>
+                <td class='value'>9</td>
+                <td class='value'>3</td>
             </tr>
             <tr>
-                <td>Covers Upgrade</td>
-                <td>3</td>
-                <td>6</td>
-                <td>2</td>
+                <td class='epic'>Covers Upgrade</td>
+                <td class='value'>3</td>
+                <td class='value'>6</td>
+                <td class='value'>2</td>
             </tr>
             <tr>
-                <td>Support CS Migration</td>
-                <td>7</td>
-                <td>10</td>
-                <td>3</td>
+                <td class='epic'>Support CS Migration</td>
+                <td class='value'>7</td>
+                <td class='value'>10</td>
+                <td class='value'>3</td>
             </tr>
             <tr>
-                <td>Better Data Reporting</td>
-                <td>1</td>
-                <td>2</td>
-                <td>2</td>
+                <td class='epic'>Better Data Reporting</td>
+                <td class='value'>1</td>
+                <td class='value'>2</td>
+                <td class='value'>2</td>
             </tr>
             <tr>
-                <td>"Bugs / Tech Debt, Data Cleanup"</td>
-                <td>2</td>
-                <td>8</td>
-                <td>1</td>
+                <td class='epic'>Bugs / Tech Debt, Data Cleanup</td>
+                <td class='value'>2</td>
+                <td class='value'>8</td>
+                <td class='value'>1</td>
             </tr>
             <tr>
-                <td>Support QA in Online</td>
-                <td>8</td>
-                <td>2</td>
-                <td>1</td>
+                <td class='epic'>Support QA in Online</td>
+                <td class='value'>8</td>
+                <td class='value'>2</td>
+                <td class='value'>1</td>
             </tr>
             <tr>
-                <td>Absorb Storia Tools</td>
-                <td>9</td>
-                <td>3</td>
-                <td>3</td>
+                <td class='epic'>Absorb Storia Tools</td>
+                <td class='value'>9</td>
+                <td class='value'>3</td>
+                <td class='value'>3</td>
             </tr>
             <tr>
-                <td>EPUB Widget Spec</td>
-                <td>5</td>
-                <td>1</td>
-                <td>1</td>
+                <td class='epic'>EPUB Widget Spec</td>
+                <td class='value'>5</td>
+                <td class='value'>1</td>
+                <td class='value'>1</td>
             </tr>
             <tr>
-                <td>Better Issue reporting / Content Flagging</td>
-                <td>3</td>
-                <td>7</td>
-                <td>2</td>
+                <td class='epic'>Better Issue reporting / Content Flagging</td>
+                <td class='value'>3</td>
+                <td class='value'>7</td>
+                <td class='value'>2</td>
             </tr>
             <tr>
-                <td>API improvements / relocation</td>
-                <td>4</td>
-                <td>5</td>
-                <td>3</td>
+                <td class='epic'>API improvements / relocation</td>
+                <td class='value'>4</td>
+                <td class='value'>5</td>
+                <td class='value'>3</td>
             </tr>
             <tr>
-                <td>Compose MVP</td>
-                <td>10</td>
-                <td>4</td>
-                <td>4</td>
+                <td class='epic'>Compose MVP</td>
+                <td class='value'>10</td>
+                <td class='value'>4</td>
+                <td class='value'>4</td>
             </tr>
             <tr>
-                <td>PDF -> FXL EPUB</td>
-                <td>9</td>
-                <td>5</td>
-                <td>4</td>
+                <td class='epic'>PDF -> FXL EPUB</td>
+                <td class='value'>9</td>
+                <td class='value'>5</td>
+                <td class='value'>4</td>
             </tr>
             <tr>
-                <td>Validates MVP</td>
-                <td>6</td>
-                <td>4</td>
-                <td>2</td>
+                <td class='epic'>Validates MVP</td>
+                <td class='value'>6</td>
+                <td class='value'>4</td>
+                <td class='value'>2</td>
             </tr>
             <tr>
-                <td>Responsive and Accessible FLOE Engines</td>
-                <td>7</td>
-                <td>7</td>
-                <td>3</td>
+                <td class='epic'>Responsive and Accessible FLOE Engines</td>
+                <td class='value'>7</td>
+                <td class='value'>7</td>
+                <td class='value'>3</td>
             </tr>
             <tr>
-                <td>FLOE 3 MVP</td>
-                <td>5</td>
-                <td>3</td>
-                <td>1</td>
+                <td class='epic'>FLOE 3 MVP</td>
+                <td class='value'>5</td>
+                <td class='value'>3</td>
+                <td class='value'>1</td>
             </tr>
         </tbody>
     </table>
