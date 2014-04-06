@@ -31,7 +31,7 @@
             text-align: center;
             width: 100px;
             padding: 5px;
-            font-family: Arial;
+            font-family: Roboto, Helvetica, Arial;
             font-size: 14px;
             background: #5799db;
             border: 0px;
@@ -78,6 +78,24 @@
         }
         .axis .domain {
             stroke: #666;
+        }
+        #clear,
+        #save {
+            float: left;
+            width: 96px;
+            margin: 30px;
+            margin-left: 10%;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #333;
+            border-radius: 3px;
+            font-family: Roboto, Helvetica, Arial;
+            font-size: 16px;
+            padding: 5px;
+            background-color: #5799db;
+            color: #fff;
+            text-transform: uppercase;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -235,9 +253,24 @@
             </tr>
         </tbody>
     </table>
+    <a id="clear" href="javascript:void(0);">Clear</a>
+    <a id="save" href="javascript:void(0);">Save</a>
+
     <script>
         $(document).ready(function() {
+            var $table = $('.ediTable');
+            $('#save').click(function() {
+                localStorage.setItem('ediTable', $table.html());
+            });
 
+            $('#clear').click(function() {
+                localStorage.clear('ediTable');
+                location.reload();
+            });
+
+            if (localStorage.getItem('ediTable')) {
+                $table.html(localStorage.getItem('ediTable'));
+            }
             var getData = function() {
                 var data = [];
                 $('tbody tr').each(function(index, tr) {
@@ -325,7 +358,7 @@
                     .attr("class", "dot")
                     .attr("r", function(d) {
                         if (d.size === 0) {
-                            return 0;   
+                            return 0;
                         } else {
                             return 4 + d.size * d.size * 1.05;
                         }
