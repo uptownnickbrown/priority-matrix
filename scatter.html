@@ -24,7 +24,7 @@ body {
 .tooltip {   
   position: absolute;           
   text-align: center;
-  width: 60px;
+  width: 100px;
   padding: 5px;             
   font: 12px Roboto, Helvetica, Arial;        
   background: #5799db;   
@@ -62,10 +62,6 @@ var yValue = function(d) { return d.Importance;}, // data -> value
     yAxis = d3.svg.axis().scale(yScale).orient("left");
 
 var dotSize = function(d) {return d.Size;};
-    
-// setup fill color
-var cValue = function(d) { return d.Epic;},
-    color = d3.scale.category10();
 
 // add the graph canvas to the body of the webpage
 var svg = d3.select("body").append("svg")
@@ -156,11 +152,11 @@ d3.csv("epics.csv", function(error, data) {
       .on("mouseover", function(d) {
           tooltip.transition()
                .duration(400)
-               .style("opacity", .9);
+               .style("opacity", 1);
           tooltip.html(d.Epic + "<br/> (" + xValue(d) 
 	        + ", " + yValue(d) + ", " + dotSize(d) + ")")
-               .style("left", (d3.event.pageX - 50) + "px")
-               .style("top", (d3.event.pageY - 60) + "px");
+               .style("left", (d3.event.pageX + 5) + "px")
+               .style("top", (d3.event.pageY + 5) + "px");
       })
       .on("mouseout", function(d) {
           tooltip.transition()
