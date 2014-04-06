@@ -42,7 +42,7 @@
             float: left;
         }
         .ediTable {
-            margin: 15px 25px 0px 0px;
+            margin: 15px 25px 40px 0px;
             width: 42%;
             min-width: 300px;
             max-width: 560px;
@@ -74,7 +74,7 @@
         }
         .value {
             width: 4%;
-            text-align: right;
+            text-align: center;
         }
         .axis .domain {
             stroke: #666;
@@ -83,19 +83,21 @@
         #save {
             float: left;
             width: 96px;
+            height: 48px;
             margin: 30px;
             margin-left: 10%;
             text-align: center;
-            vertical-align: middle;
-            border: 1px solid #333;
+            line-height: 48px;
             border-radius: 3px;
             font-family: Roboto, Helvetica, Arial;
-            font-size: 16px;
-            padding: 5px;
+            font-size: 1.2em;
             background-color: #5799db;
             color: #fff;
             text-transform: uppercase;
             text-decoration: none;
+        }
+        .ediTable tbody tr:last-child {
+            color: #999;
         }
     </style>
 </head>
@@ -251,6 +253,7 @@
                 <td class='value' contenteditable='true'>3</td>
                 <td class='value' contenteditable='true'>1</td>
             </tr>
+
         </tbody>
     </table>
     <a id="clear" href="javascript:void(0);">Clear</a>
@@ -267,6 +270,13 @@
                 localStorage.clear('ediTable');
                 location.reload();
             });
+            var table = $(".ediTable");
+            table.append('<tr>\
+                <td class="epic" contenteditable="true">Add new text here...</td>\
+                <td class="value" contenteditable="true">0</td>\
+                <td class="value" contenteditable="true">0</td>\
+                <td class="value" contenteditable="true">0</td>\
+                </tr>');
 
             if (localStorage.getItem('ediTable')) {
                 $table.html(localStorage.getItem('ediTable'));
