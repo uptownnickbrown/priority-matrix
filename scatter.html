@@ -42,7 +42,7 @@
             float: left;
         }
         .ediTable {
-            margin: 15px 25px 40px 0px;
+            margin: 25px 25px 40px 0px;
             width: 42%;
             min-width: 300px;
             max-width: 560px;
@@ -79,6 +79,10 @@
         .axis .domain {
             stroke: #666;
         }
+        .divider .domain {
+            stroke: #666;
+            fill: none;
+        }
         #clear,
         #save {
             float: left;
@@ -107,10 +111,10 @@
 
     <script>
         var margin = {
-            top: 30,
+            top: 25,
             right: 40,
-            bottom: 30,
-            left: 30
+            bottom: 50,
+            left: 50
         },
             width = 600 - margin.left - margin.right,
             height = 600 - margin.top - margin.bottom;
@@ -338,9 +342,9 @@
                 .call(xAxis)
                 .append("text")
                 .attr("class", "label")
-                .attr("x", width)
-                .attr("y", -6)
-                .style("text-anchor", "end")
+                .attr("x", width / 2)
+                .attr("y", 35)
+                .style("text-anchor", "middle")
                 .style("fill", "#bbb")
                 .text("urgency");
 
@@ -352,11 +356,73 @@
                 .append("text")
                 .attr("class", "label")
                 .attr("transform", "rotate(-90)")
-                .attr("y", 6)
-                .attr("dy", ".71em")
-                .style("text-anchor", "end")
+                .attr("y", -25)
+                .attr("x", -.5 * width)
+                .style("text-anchor", "middle")
                 .style("fill", "#bbb")
                 .text("importance");
+
+            svg.append("line")
+                .attr("class", "y divider")
+                .attr("x1", width / 2 + .5)
+                .attr("y1", 0)
+                .attr("x2", width / 2 + .5)
+                .attr("y2", height)
+                .style("stroke", "#666");
+
+            svg.append("line")
+                .attr("class", "y divider")
+                .attr("x1", width + .5)
+                .attr("y1", 0)
+                .attr("x2", width + .5)
+                .attr("y2", height)
+                .style("stroke", "#666");
+
+            svg.append("line")
+                .attr("class", "x divider")
+                .attr("x1", 0)
+                .attr("y1", .5)
+                .attr("x2", width)
+                .attr("y2", .5)
+                .style("stroke", "#666");
+
+            svg.append("line")
+                .attr("class", "x divider")
+                .attr("x1", 0)
+                .attr("y1", height / 2 + .5)
+                .attr("x2", width)
+                .attr("y2", height / 2 + .5)
+                .style("stroke", "#666");
+
+            svg.append("text")
+                .attr("class", "label")
+                .attr("x", width / 4)
+                .attr("y", 16)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("important goals");
+            svg.append("text")
+                .attr("class", "label")
+                .attr("x", width * 3 / 4)
+                .attr("y", 16)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("critical activities");
+            svg.append("text")
+                .attr("class", "label")
+                .attr("x", width / 4)
+                .attr("y", height / 2 + 16)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("distractions");
+            svg.append("text")
+                .attr("class", "label")
+                .attr("x", width * 3 / 4)
+                .attr("y", height / 2 + 16)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("interruptions");
+
 
             var drawDots = function(data) {
                 // draw dots
@@ -379,13 +445,13 @@
                         var colorCat;
 
                         if (d.urgency < 5 && d.importance < 5) {
-                            colorCat = "#ecff5e";
-                        } else if (d.urgency >= 5 && d.importance <= 5) {
                             colorCat = "#fa2121";
+                        } else if (d.urgency >= 5 && d.importance <= 5) {
+                            colorCat = "#ffff8e";
                         } else if (d.urgency > 5 && d.importance > 5) {
-                            colorCat = "#217821";
+                            colorCat = "#2c812c";
                         } else {
-                            colorCat = "#2121be";
+                            colorCat = "#3f3fbf";
                         }
 
                         return colorCat;
@@ -395,13 +461,13 @@
                         var colorCat;
 
                         if (d.urgency < 5 && d.importance < 5) {
-                            colorCat = "#ecff5e";
-                        } else if (d.urgency >= 5 && d.importance <= 5) {
                             colorCat = "#fa2121";
+                        } else if (d.urgency >= 5 && d.importance <= 5) {
+                            colorCat = "#ffff8e";
                         } else if (d.urgency > 5 && d.importance > 5) {
-                            colorCat = "#217821";
+                            colorCat = "#2c812c";
                         } else {
-                            colorCat = "#2121be";
+                            colorCat = "#3f3fbf";
                         }
 
                         return colorCat;
