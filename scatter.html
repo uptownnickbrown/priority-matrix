@@ -64,7 +64,7 @@
          * axis - sets up axis
          */
     </script>
-    <table contenteditable="true">
+    <table class='ediTable' contenteditable="true">
         <thead>
             <tr>
                 <th>Epic</th>
@@ -193,21 +193,25 @@
     <script>
         $(document).ready(function() {
 
-            var data = [];
-            $('tbody tr').each(function(index, tr) {
-                var cells = $(tr).find('td');
-                var data_object = {
-                    'epic': cells[0].innerHTML,
-                    'importance': parseInt(cells[1].innerHTML),
-                    'urgency': parseInt(cells[2].innerHTML),
-                    'size': parseInt(cells[3].innerHTML)
-                };
-                data.push(data_object);
-            });
+            var getData = function() {
+                var data = [];
+                $('tbody tr').each(function(index, tr) {
+                    var cells = $(tr).find('td');
+                    var data_object = {
+                        'epic': cells[0].innerHTML,
+                        'importance': parseInt(cells[1].innerHTML),
+                        'urgency': parseInt(cells[2].innerHTML),
+                        'size': parseInt(cells[3].innerHTML)
+                    };
+                    data.push(data_object);
+                });
+                return data;
+            };
+
+            var data = getData();
 
             // setup x 
             var xValue = function(d) {
-                console.log(d.urgency);
                 return d.urgency;
             }, // data -> value
                 xScale = d3.scale.linear().range([0, width]), // value -> display
@@ -262,62 +266,66 @@
                 .style("text-anchor", "end")
                 .text("importance");
 
+            var drawDots = function(data) {
+                // draw dots
+                var svg = d3.select('svg g');
+                svg.selectAll(".dot").remove();
+                svg.selectAll(".dot")
+                    .data(data)
+                    .enter().append("circle")
+                    .attr("class", "dot")
+                    .attr("r", function(d) {
+                        return 3 + d.size * d.size;
+                    })
+                    .attr("cx", xMap)
+                    .attr("cy", yMap)
+                    .style("fill", function(d) {
+                        var colorCat;
 
-            // draw dots
-            svg.selectAll(".dot")
-                .data(data)
-                .enter().append("circle")
-                .attr("class", "dot")
-                .attr("r", function(d) {
-                    return 3 + d.size * d.size;
-                })
-                .attr("cx", xMap)
-                .attr("cy", yMap)
-                .style("fill", function(d) {
-                    var colorCat;
+                        if (d.urgency < 5 && d.importance < 5) {
+                            colorCat = "#ecff5e";
+                        } else if (d.urgency >= 5 && d.importance <= 5) {
+                            colorCat = "#fa2121";
+                        } else if (d.urgency > 5 && d.importance > 5) {
+                            colorCat = "#217821";
+                        } else {
+                            colorCat = "#2121be";
+                        }
 
-                    if (d.urgency < 5 && d.importance < 5) {
-                        colorCat = "#ecff5e";
-                    } else if (d.urgency >= 5 && d.importance <= 5) {
-                        colorCat = "#fa2121";
-                    } else if (d.urgency > 5 && d.importance > 5) {
-                        colorCat = "#217821";
-                    } else {
-                        colorCat = "#2121be";
-                    }
+                        return colorCat;
 
-                    return colorCat;
+                    })
+                    .style("stroke", function(d) {
+                        var colorCat;
 
-                })
-                .style("stroke", function(d) {
-                    var colorCat;
+                        if (d.urgency < 5 && d.importance < 5) {
+                            colorCat = "#ecff5e";
+                        } else if (d.urgency >= 5 && d.importance <= 5) {
+                            colorCat = "#fa2121";
+                        } else if (d.urgency > 5 && d.importance > 5) {
+                            colorCat = "#217821";
+                        } else {
+                            colorCat = "#2121be";
+                        }
 
-                    if (d.urgency < 5 && d.importance < 5) {
-                        colorCat = "#ecff5e";
-                    } else if (d.urgency >= 5 && d.importance <= 5) {
-                        colorCat = "#fa2121";
-                    } else if (d.urgency > 5 && d.importance > 5) {
-                        colorCat = "#217821";
-                    } else {
-                        colorCat = "#2121be";
-                    }
+                        return colorCat;
 
-                    return colorCat;
-
-                })
-                .on("mouseover", function(d) {
-                    tooltip.transition()
-                        .duration(400)
-                        .style("opacity", 1);
-                    tooltip.html(d.epic + "<br/> (" + xValue(d) + ", " + yValue(d) + ", " + dotSize(d) + ")")
-                        .style("left", (d3.event.pageX + 5) + "px")
-                        .style("top", (d3.event.pageY + 5) + "px");
-                })
-                .on("mouseout", function(d) {
-                    tooltip.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                });
+                    })
+                    .on("mouseover", function(d) {
+                        tooltip.transition()
+                            .duration(400)
+                            .style("opacity", 1);
+                        tooltip.html(d.epic + "<br/> (" + xValue(d) + ", " + yValue(d) + ", " + dotSize(d) + ")")
+                            .style("left", (d3.event.pageX + 5) + "px")
+                            .style("top", (d3.event.pageY + 5) + "px");
+                    })
+                    .on("mouseout", function(d) {
+                        tooltip.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    });
+            };
+            drawDots(getData());
 
             $('body').on('focus', '[contenteditable]', function() {
                 var $this = $(this);
@@ -329,6 +337,7 @@
                     $this.data('before', $this.html());
                     $this.trigger('change');
                 }
+                drawDots(getData());
                 return $this;
             });
         });
