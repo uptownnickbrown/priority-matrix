@@ -16,6 +16,7 @@
             font-family: Roboto, Helvetica, Arial;
             font-size: .9em;
             color: #333;
+            margin: 0;
         }
         .axis path,
         .axis line {
@@ -28,6 +29,8 @@
         }
         .tooltip {
             position: absolute;
+            top: 0px;
+            left: 0px;
             text-align: center;
             width: 100px;
             padding: 5px;
@@ -42,10 +45,10 @@
             float: left;
         }
         .ediTable {
-            margin: 25px 25px 40px 0px;
-            width: 42%;
+            margin: 30px 30px 30px 0px;
+            width: 45%;
             min-width: 300px;
-            max-width: 560px;
+            max-width: 620px;
             float: right;
             font-family: Roboto, Helvetica, Arial;
             font-size: 1.1em;
@@ -63,10 +66,13 @@
             margin-bottom: .5em;
         }
         tr:nth-child(odd) {
-            background-color: #ccc;
+            background-color: #eee;
         }
         tr:nth-child(even) {
-            background-color: #eee;
+            background-color: #ccc;
+        }
+        thead tr:nth-child(odd) {
+            background-color: #ccc;
         }
         .epic {
             width: 30%;
@@ -83,13 +89,15 @@
             stroke: #666;
             fill: none;
         }
+        #clear {
+            clear: left;
+        }
         #clear,
         #save {
             float: left;
             width: 96px;
             height: 48px;
-            margin: 30px;
-            margin-left: 10%;
+            margin: 10px 30px 30px 134px;
             text-align: center;
             line-height: 48px;
             border-radius: 3px;
@@ -103,21 +111,67 @@
         .ediTable tbody tr:last-child {
             color: #999;
         }
+        header {
+            width: 100%;
+            height: 110px;
+            background-color: #5799db;
+            font-family: Roboto, Helvetica, Arial;
+            clear: both;
+        }
+        h1 {
+            font-family: Roboto, Helvetica, Arial;
+            line-height: 70px;
+            vertical-align: middle;
+            font-size: 3.8em;
+            text-align: center;
+            margin: 0 0 0 0;
+            color: #fff;
+        }
+        h3 {
+            font-family: Roboto, Helvetica, Arial;
+            vertical-align: middle;
+            text-align: center;
+            margin: 0;
+            margin-top: 4px;
+            color: #fff;
+            text-decoration: none;
+        }
+        #twitter {
+            color: #fff;
+            text-decoration: none;
+        }
+        footer {
+            clear: both;
+            height: 50px;
+            background-color: #5799db;
+            font-family: Roboto, Helvetica, Arial;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            text-align: right;
+            line-height: 50px;
+            padding-right: 40px;
+        }
     </style>
 </head>
 
 <body>
     <script src="http://d3js.org/d3.v3.min.js"></script>
-
+    <header>
+        <h1>Priority Matrix</h1>
+        <h3>
+            <a id='twitter' href="https://twitter.com/uptownnickbrown">@uptownnickbrown</a>
+        </h3>
+    </header>
     <script>
         var margin = {
-            top: 25,
+            top: 30,
             right: 40,
-            bottom: 50,
-            left: 50
+            bottom: 40,
+            left: 65
         },
-            width = 600 - margin.left - margin.right,
-            height = 600 - margin.top - margin.bottom;
+            width = 595 - margin.left - margin.right,
+            height = 560 - margin.top - margin.bottom;
 
          // add the graph canvas to the body of the webpage
         var svg = d3.select("body").append("svg")
@@ -168,18 +222,6 @@
                 <td class='value' contenteditable='true'>1</td>
             </tr>
             <tr>
-                <td class='epic' contenteditable='true'>Worth focusing on this one.</td>
-                <td class='value' contenteditable='true'>6</td>
-                <td class='value' contenteditable='true'>9</td>
-                <td class='value' contenteditable='true'>3</td>
-            </tr>
-            <tr>
-                <td class='epic' contenteditable='true'>Not too bad to take this on.</td>
-                <td class='value' contenteditable='true'>3</td>
-                <td class='value' contenteditable='true'>6</td>
-                <td class='value' contenteditable='true'>2</td>
-            </tr>
-            <tr>
                 <td class='epic' contenteditable='true'>Let me guess...you're working on this right now.</td>
                 <td class='value' contenteditable='true'>7</td>
                 <td class='value' contenteditable='true'>10</td>
@@ -216,24 +258,6 @@
                 <td class='value' contenteditable='true'>1</td>
             </tr>
             <tr>
-                <td class='epic' contenteditable='true'>A bug that's been raised a few times.</td>
-                <td class='value' contenteditable='true'>3</td>
-                <td class='value' contenteditable='true'>7</td>
-                <td class='value' contenteditable='true'>2</td>
-            </tr>
-            <tr>
-                <td class='epic' contenteditable='true'>Technical debt usually lives around here.</td>
-                <td class='value' contenteditable='true'>4</td>
-                <td class='value' contenteditable='true'>5</td>
-                <td class='value' contenteditable='true'>3</td>
-            </tr>
-            <tr>
-                <td class='epic' contenteditable='true'>Most important long-term goal around.</td>
-                <td class='value' contenteditable='true'>10</td>
-                <td class='value' contenteditable='true'>4</td>
-                <td class='value' contenteditable='true'>4</td>
-            </tr>
-            <tr>
                 <td class='epic' contenteditable='true'>Wish we could work on this too.</td>
                 <td class='value' contenteditable='true'>9</td>
                 <td class='value' contenteditable='true'>5</td>
@@ -262,6 +286,9 @@
     <a id="clear" href="javascript:void(0);">Clear</a>
     <a id="save" href="javascript:void(0);">Save</a>
 
+    <footer>
+        <p>© 2014 by Nick Brown</p>
+    </footer>
     <script>
         $(document).ready(function() {
             var $table = $('.ediTable');
@@ -367,7 +394,7 @@
                 .attr("y1", 0)
                 .attr("x2", width / 2 + .5)
                 .attr("y2", height)
-                .style("stroke", "#666");
+                .style("stroke", "#bbb");
 
             svg.append("line")
                 .attr("class", "y divider")
@@ -391,7 +418,7 @@
                 .attr("y1", height / 2 + .5)
                 .attr("x2", width)
                 .attr("y2", height / 2 + .5)
-                .style("stroke", "#666");
+                .style("stroke", "#bbb");
 
             svg.append("text")
                 .attr("class", "label")
@@ -435,7 +462,7 @@
                         if (d.size === 0) {
                             return 0;
                         } else {
-                            return 4 + d.size * d.size * 1.05;
+                            return 4 + d.size * d.size;
                         }
                     })
                     .attr("cx", xMap)
