@@ -1,64 +1,520 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 
 <head>
-    <meta charset="utf-8">
-    <title>jQuery UI Sortable - Default functionality</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.9.1.js"></script>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <link rel="stylesheet" href="/css/style.css">
-    <script>
-        $(function() {
-            $( "#sortable" ).sortable({
-                start: function( event, ui ) {
-                    var newRank = ui.item.index() + 1;
-                    ui.item.find('.rank').addClass('newItem').html(newRank);
-                },
-                stop: function( event, ui ) {
-                    var newRank = ui.item.index() + 1;
-                    ui.item.find('.rank').addClass('changed').html(newRank);
-                }
-            });
-            $( "#sortable" ).disableSelection();
-          });
-    </script>
+    <meta charset="utf-8">
+
+    <!-- Example based on http://bl.ocks.org/mbostock/3887118 -->
+    <!-- Tooltip example from http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html -->
+
+    <style>
+        body {
+            font-family: Roboto, Helvetica, Arial;
+            font-size: .9em;
+            color: #333;
+        }
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+        .dot {
+            stroke: #000;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: 100px;
+            padding: 5px;
+            font-family: Roboto, Helvetica, Arial;
+            font-size: 14px;
+            background: #5799db;
+            border: 0px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+        .livechart {
+            float: left;
+        }
+        .ediTable {
+            margin: 25px 25px 40px 0px;
+            width: 42%;
+            min-width: 300px;
+            max-width: 560px;
+            float: right;
+            font-family: Roboto, Helvetica, Arial;
+            font-size: 1.1em;
+            line-height: 1.1em;
+            border-spacing: 0px;
+        }
+        .ediTable td {
+            padding: 6px 6px 6px 6px;
+        }
+        .ediTable th {
+            font-size: 1.2em;
+            padding: 6px 6px 6px 6px;
+        }
+        .ediTable tr {
+            margin-bottom: .5em;
+        }
+        tr:nth-child(odd) {
+            background-color: #ccc;
+        }
+        tr:nth-child(even) {
+            background-color: #eee;
+        }
+        .epic {
+            width: 30%;
+            text-align: left;
+        }
+        .value {
+            width: 4%;
+            text-align: center;
+        }
+        .axis .domain {
+            stroke: #666;
+        }
+        .divider .domain {
+            stroke: #666;
+            fill: none;
+        }
+        #clear,
+        #save {
+            float: left;
+            width: 96px;
+            height: 48px;
+            margin: 30px;
+            margin-left: 10%;
+            text-align: center;
+            line-height: 48px;
+            border-radius: 3px;
+            font-family: Roboto, Helvetica, Arial;
+            font-size: 1.2em;
+            background-color: #5799db;
+            color: #fff;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+        .ediTable tbody tr:last-child {
+            color: #999;
+        }
+    </style>
 </head>
 
 <body>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
 
-    <ul id="sortable">
-        <li class="ui-state-default">
-            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1 - Rank
-            <span class="rank">1</span>
-        </li>
-        <li class="ui-state-default">
-            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 2 - Rank
-            <span class="rank">1</span>
-        </li>
-        <li class="ui-state-default">
-            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 3 - Rank
-            <span class="rank">1</span>
-        </li>
-        <li class="ui-state-default">
-            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 4 - Rank
-            <span class="rank">1</span>
-        </li>
-        <li class="ui-state-default">
-            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 5 - Rank
-            <span class="rank">1</span>
-        </li>
-        <li class="ui-state-default">
-            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 6 - Rank
-            <span class="rank">1</span>
-        </li>
-        <li class="ui-state-default">
-            <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 7 - Rank
-            <span class="rank">1</span>
-        </li>
-    </ul>
+    <script>
+        var margin = {
+            top: 25,
+            right: 40,
+            bottom: 50,
+            left: 50
+        },
+            width = 600 - margin.left - margin.right,
+            height = 600 - margin.top - margin.bottom;
+
+         // add the graph canvas to the body of the webpage
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .attr("class", "livechart")
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        /* 
+         * value accessor - returns the value to encode for a given data object.
+         * scale - maps value to a visual display encoding, such as a pixel position.
+         * map function - maps from data value to display value
+         * axis - sets up axis
+         */
+    </script>
+    <table class='ediTable'>
+        <thead>
+            <tr>
+                <th class='epic'>Epic</th>
+                <th class='value'>Importance</th>
+                <th class='value'>Urgency</th>
+                <th class='value'>Size</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class='epic' contenteditable='true'>This task is very crucial!</td>
+                <td class='value' contenteditable='true'>10</td>
+                <td class='value' contenteditable='true'>9</td>
+                <td class='value' contenteditable='true'>3</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>This task is very urgent!</td>
+                <td class='value' contenteditable='true'>8</td>
+                <td class='value' contenteditable='true'>10</td>
+                <td class='value' contenteditable='true'>5</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Big ticket distraction, watch out.</td>
+                <td class='value' contenteditable='true'>4</td>
+                <td class='value' contenteditable='true'>6</td>
+                <td class='value' contenteditable='true'>5</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>High pressure for no reason…</td>
+                <td class='value' contenteditable='true'>2</td>
+                <td class='value' contenteditable='true'>8</td>
+                <td class='value' contenteditable='true'>1</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Worth focusing on this one.</td>
+                <td class='value' contenteditable='true'>6</td>
+                <td class='value' contenteditable='true'>9</td>
+                <td class='value' contenteditable='true'>3</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Not too bad to take this on.</td>
+                <td class='value' contenteditable='true'>3</td>
+                <td class='value' contenteditable='true'>6</td>
+                <td class='value' contenteditable='true'>2</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Let me guess...you're working on this right now.</td>
+                <td class='value' contenteditable='true'>7</td>
+                <td class='value' contenteditable='true'>10</td>
+                <td class='value' contenteditable='true'>3</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Why is this even on the list?</td>
+                <td class='value' contenteditable='true'>1</td>
+                <td class='value' contenteditable='true'>2</td>
+                <td class='value' contenteditable='true'>2</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Another fire to put out.</td>
+                <td class='value' contenteditable='true'>2</td>
+                <td class='value' contenteditable='true'>8</td>
+                <td class='value' contenteditable='true'>1</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>A long-term goal that you need to make time for.</td>
+                <td class='value' contenteditable='true'>8</td>
+                <td class='value' contenteditable='true'>2</td>
+                <td class='value' contenteditable='true'>1</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Another long-term goal.</td>
+                <td class='value' contenteditable='true'>9</td>
+                <td class='value' contenteditable='true'>3</td>
+                <td class='value' contenteditable='true'>3</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Strategically interesting, but low value.</td>
+                <td class='value' contenteditable='true'>5</td>
+                <td class='value' contenteditable='true'>1</td>
+                <td class='value' contenteditable='true'>1</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>A bug that's been raised a few times.</td>
+                <td class='value' contenteditable='true'>3</td>
+                <td class='value' contenteditable='true'>7</td>
+                <td class='value' contenteditable='true'>2</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Technical debt usually lives around here.</td>
+                <td class='value' contenteditable='true'>4</td>
+                <td class='value' contenteditable='true'>5</td>
+                <td class='value' contenteditable='true'>3</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Most important long-term goal around.</td>
+                <td class='value' contenteditable='true'>10</td>
+                <td class='value' contenteditable='true'>4</td>
+                <td class='value' contenteditable='true'>4</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Wish we could work on this too.</td>
+                <td class='value' contenteditable='true'>9</td>
+                <td class='value' contenteditable='true'>5</td>
+                <td class='value' contenteditable='true'>4</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Right in the middle, could go either way.</td>
+                <td class='value' contenteditable='true'>6</td>
+                <td class='value' contenteditable='true'>4</td>
+                <td class='value' contenteditable='true'>2</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Critical, but not p0.</td>
+                <td class='value' contenteditable='true'>7</td>
+                <td class='value' contenteditable='true'>7</td>
+                <td class='value' contenteditable='true'>3</td>
+            </tr>
+            <tr>
+                <td class='epic' contenteditable='true'>Not a high priority.</td>
+                <td class='value' contenteditable='true'>5</td>
+                <td class='value' contenteditable='true'>3</td>
+                <td class='value' contenteditable='true'>1</td>
+            </tr>
+        </tbody>
+    </table>
+    <a id="clear" href="javascript:void(0);">Clear</a>
+    <a id="save" href="javascript:void(0);">Save</a>
+
+    <script>
+        $(document).ready(function() {
+            var $table = $('.ediTable');
+            $('#save').click(function() {
+                localStorage.setItem('ediTable', $table.html());
+            });
+
+            $('#clear').click(function() {
+                localStorage.clear('ediTable');
+                location.reload();
+            });
+            var table = $(".ediTable");
+            table.append('<tr>\
+                <td class="epic" contenteditable="true">Add new text here...</td>\
+                <td class="value" contenteditable="true">0</td>\
+                <td class="value" contenteditable="true">0</td>\
+                <td class="value" contenteditable="true">0</td>\
+                </tr>');
+
+            if (localStorage.getItem('ediTable')) {
+                $table.html(localStorage.getItem('ediTable'));
+            }
+            var getData = function() {
+                var data = [];
+                $('tbody tr').each(function(index, tr) {
+                    var cells = $(tr).find('td');
+                    var data_object = {
+                        'epic': cells[0].innerHTML,
+                        'importance': parseInt(cells[1].innerHTML),
+                        'urgency': parseInt(cells[2].innerHTML),
+                        'size': parseInt(cells[3].innerHTML)
+                    };
+                    data.push(data_object);
+                });
+                return data;
+            };
+
+            var data = getData();
+
+            // setup x 
+            var xValue = function(d) {
+                return d.urgency;
+            }, // data -> value
+                xScale = d3.scale.linear().range([0, width]), // value -> display
+                xMap = function(d) {
+                    return xScale(xValue(d));
+                }, // data -> display
+                xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+
+            // setup y
+            var yValue = function(d) {
+                return d.importance;
+            }, // data -> value
+                yScale = d3.scale.linear().range([height, 0]), // value -> display
+                yMap = function(d) {
+                    return yScale(yValue(d));
+                }, // data -> display
+                yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+            var dotSize = function(d) {
+                return d.size;
+            };
+            // add the tooltip area to the webpage
+            var tooltip = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
+            // don't want dots overlapping axis, so add in buffer to data domain
+            xScale.domain([0, 10]);
+            yScale.domain([0, 10]);
+
+            // x-axis
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .style("fill", "#666")
+                .call(xAxis)
+                .append("text")
+                .attr("class", "label")
+                .attr("x", width / 2)
+                .attr("y", 35)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("urgency");
+
+            // y-axis
+            svg.append("g")
+                .attr("class", "y axis")
+                .style("fill", "#666")
+                .call(yAxis)
+                .append("text")
+                .attr("class", "label")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -25)
+                .attr("x", -.5 * width)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("importance");
+
+            svg.append("line")
+                .attr("class", "y divider")
+                .attr("x1", width / 2 + .5)
+                .attr("y1", 0)
+                .attr("x2", width / 2 + .5)
+                .attr("y2", height)
+                .style("stroke", "#666");
+
+            svg.append("line")
+                .attr("class", "y divider")
+                .attr("x1", width + .5)
+                .attr("y1", 0)
+                .attr("x2", width + .5)
+                .attr("y2", height)
+                .style("stroke", "#666");
+
+            svg.append("line")
+                .attr("class", "x divider")
+                .attr("x1", 0)
+                .attr("y1", .5)
+                .attr("x2", width)
+                .attr("y2", .5)
+                .style("stroke", "#666");
+
+            svg.append("line")
+                .attr("class", "x divider")
+                .attr("x1", 0)
+                .attr("y1", height / 2 + .5)
+                .attr("x2", width)
+                .attr("y2", height / 2 + .5)
+                .style("stroke", "#666");
+
+            svg.append("text")
+                .attr("class", "label")
+                .attr("x", width / 4)
+                .attr("y", 16)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("important goals");
+            svg.append("text")
+                .attr("class", "label")
+                .attr("x", width * 3 / 4)
+                .attr("y", 16)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("critical activities");
+            svg.append("text")
+                .attr("class", "label")
+                .attr("x", width / 4)
+                .attr("y", height / 2 + 16)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("distractions");
+            svg.append("text")
+                .attr("class", "label")
+                .attr("x", width * 3 / 4)
+                .attr("y", height / 2 + 16)
+                .style("text-anchor", "middle")
+                .style("fill", "#bbb")
+                .text("interruptions");
 
 
+            var drawDots = function(data) {
+                // draw dots
+                var svg = d3.select('svg g');
+                svg.selectAll(".dot").remove();
+                svg.selectAll(".dot")
+                    .data(data)
+                    .enter().append("circle")
+                    .attr("class", "dot")
+                    .attr("r", function(d) {
+                        if (d.size === 0) {
+                            return 0;
+                        } else {
+                            return 4 + d.size * d.size * 1.05;
+                        }
+                    })
+                    .attr("cx", xMap)
+                    .attr("cy", yMap)
+                    .style("fill", function(d) {
+                        var colorCat;
+
+                        if (d.urgency < 5 && d.importance < 5) {
+                            colorCat = "#fa2121";
+                        } else if (d.urgency >= 5 && d.importance <= 5) {
+                            colorCat = "#ffff8e";
+                        } else if (d.urgency > 5 && d.importance > 5) {
+                            colorCat = "#2c812c";
+                        } else {
+                            colorCat = "#3f3fbf";
+                        }
+
+                        return colorCat;
+
+                    })
+                    .style("stroke", function(d) {
+                        var colorCat;
+
+                        if (d.urgency < 5 && d.importance < 5) {
+                            colorCat = "#fa2121";
+                        } else if (d.urgency >= 5 && d.importance <= 5) {
+                            colorCat = "#ffff8e";
+                        } else if (d.urgency > 5 && d.importance > 5) {
+                            colorCat = "#2c812c";
+                        } else {
+                            colorCat = "#3f3fbf";
+                        }
+
+                        return colorCat;
+
+                    })
+                    .on("mouseover", function(d) {
+                        tooltip.transition()
+                            .duration(400)
+                            .style("opacity", 1);
+                        tooltip.html(d.epic + "<br/> (" + xValue(d) + ", " + yValue(d) + ", " + dotSize(d) + ")")
+                            .style("left", (d3.event.pageX + 5) + "px")
+                            .style("top", (d3.event.pageY + 5) + "px");
+                    })
+                    .on("mouseout", function(d) {
+                        tooltip.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    });
+            };
+
+            drawDots(getData());
+
+            $('body').on('focus', '[contenteditable]', function() {
+                var $this = $(this);
+                $this.data('before', $this.html());
+                return $this;
+            }).on('blur keyup paste input', '[contenteditable]', function() {
+                var $this = $(this);
+                if ($this.data('before') !== $this.html()) {
+                    $this.data('before', $this.html());
+                    $this.trigger('change');
+                }
+                drawDots(getData());
+                return $this;
+            });
+
+            $(document).on("focus", '.ediTable tbody tr:last-child', function() {
+                //append the new row here.
+                var table = $(".ediTable");
+                table.append('<tr>\
+                <td class="epic" contenteditable="true">Add new text here...</td>\
+                <td class="value" contenteditable="true">0</td>\
+                <td class="value" contenteditable="true">0</td>\
+                <td class="value" contenteditable="true">0</td>\
+                </tr>');
+            });
+        });
+    </script>
 </body>
 
 </html>
