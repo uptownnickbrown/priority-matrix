@@ -13,7 +13,9 @@
 
     <style>
         body {
-            font: 14px sans-serif;
+            font-family: Roboto, Helvetica, Arial;
+            font-size: .9em;
+            color: #333;
         }
         .axis path,
         .axis line {
@@ -41,8 +43,9 @@
         }
         .ediTable {
             margin: 15px 25px 0px 0px;
-            width: 40%;
+            width: 42%;
             min-width: 300px;
+            max-width:560px;
             float: right;
             font-family: Roboto, Helvetica, Arial;
             font-size: 1.1em;
@@ -66,13 +69,17 @@
             background-color: #eee;
         }
         .epic {
-            width: 25%;
+            width: 30%;
             text-align: left;
         }
         .value {
-            width: 5%;
+            width: 4%;
             text-align: right;
         }
+        .axis .domain {
+            stroke:#666;   
+        }
+        
     </style>
 </head>
 
@@ -285,17 +292,20 @@
             svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
+                .style("fill", "#666")
                 .call(xAxis)
                 .append("text")
                 .attr("class", "label")
                 .attr("x", width)
                 .attr("y", -6)
                 .style("text-anchor", "end")
+                .style("fill", "#bbb")
                 .text("urgency");
 
             // y-axis
             svg.append("g")
                 .attr("class", "y axis")
+                .style("fill", "#666")
                 .call(yAxis)
                 .append("text")
                 .attr("class", "label")
@@ -303,6 +313,7 @@
                 .attr("y", 6)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
+                .style("fill", "#bbb")
                 .text("importance");
 
             var drawDots = function(data) {
