@@ -21,26 +21,7 @@ title: Priority Matrix
             <a id='twitter' href="https://twitter.com/uptownnickbrown">@uptownnickbrown</a>
         </h3>
     </header>
-    <script>
-        // TODO Add a placeholder div here to contain the chart
-        // TODO move all this code to main.js
-        var margin = {
-            top: 30,
-            right: 40,
-            bottom: 40,
-            left: 65
-        },
-            width = 595 - margin.left - margin.right,
-            height = 560 - margin.top - margin.bottom;
-
-         // add the graph canvas to the body of the webpage
-        var svg = d3.select("body").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .attr("class", "livechart")
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    </script>
+    <div class='chartholder'></div>
     <table class='ediTable'>
         <thead>
             <tr>
