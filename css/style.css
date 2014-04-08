@@ -8,9 +8,8 @@ body {
 }
 header {
     width: 100%;
-    height: 110px;
+    height: 90px;
     background-color: #5799db;
-    font-family: Roboto, Helvetica, Arial;
     clear: both;
 }
 .livechart {
@@ -18,77 +17,90 @@ header {
 }
 .ediTable {
     float: right;
-    margin: 30px 30px 30px 0px;
-    width: 45%;
-    min-width: 300px;
-    max-width: 620px;
+    margin: 30px 30px 60px 0px;
     font-family: Roboto, Helvetica, Arial;
     font-size: 1.1em;
-    line-height: 1.1em;
     border-spacing: 0px;
 }
 footer {
-    clear: both;
-    height: 50px;
+    height: 30px;
     background-color: #5799db;
-    font-family: Roboto, Helvetica, Arial;
-    margin: 0;
-    padding: 0;
-    color: #fff;
-    text-align: right;
-    line-height: 50px;
-    padding-right: 40px;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
 }
-
 /* Typography */
 
 h1 {
     font-family: Roboto, Helvetica, Arial;
-    line-height: 70px;
+    line-height: 60px;
     vertical-align: middle;
-    font-size: 3.8em;
+    font-size: 3.4em;
     text-align: center;
     margin: 0 0 0 0;
     color: #fff;
+    font-weight: 500;
 }
 h3 {
     font-family: Roboto, Helvetica, Arial;
     vertical-align: middle;
     text-align: center;
     margin: 0;
-    margin-top: 4px;
     color: #fff;
     text-decoration: none;
+    font-weight: 300;
 }
 #twitter {
     color: #fff;
     text-decoration: none;
 }
-
+.copyright {
+    text-align: right;
+    line-height: 3px;
+    color: #fff;
+    font-family: Roboto, Helvetica, Arial;
+    padding-right: 15px;
+}
 /* Table design */
 
 .ediTable td {
     padding: 6px 6px 6px 6px;
 }
 .ediTable th {
-    font-size: 1.2em;
-    padding: 6px 6px 6px 6px;
+    font-size: 1.1em;
+    padding: 6px 2px 6px 2px;
+    font-weight: 400;
 }
 .ediTable tr {
     margin-bottom: .5em;
 }
-tr:nth-child(odd) {
+tbody tr:nth-child(odd) {
     background-color: #eee;
 }
-tr:nth-child(even) {
+tbody tr:nth-child(even) {
     background-color: #ccc;
 }
-thead tr:nth-child(odd) {
-    background-color: #ccc;
+thead tr {
+    background-color: #5799db;
+    color: #fff;
 }
-.ediTable tbody tr:last-child {
+thead tr th:first-child {
+    border-top-left-radius: 8px;
+    padding-left: 6px;
+}
+thead tr th:last-child {
+    border-top-right-radius: 8px;
+    padding-right: 6px;
+}
+tbody tr:last-child {
     /* change the text color of the "add a new row" row */
     color: #999;
+}
+tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 8px;
+}
+tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 8px;
 }
 .epic {
     width: 30%;
@@ -98,7 +110,69 @@ thead tr:nth-child(odd) {
     width: 4%;
     text-align: center;
 }
-
+thead tr th:nth-child(2):before {
+    content: "Urgency";
+}
+thead tr th:nth-child(3):before {
+    content: "Importance";
+}
+thead tr th:nth-child(4):before {
+    content: "Size";
+}
+@media screen and (max-width: 1260px) {
+    .ediTable {
+        font-size: 1em;
+    }
+    .value {
+        width: 3%;
+        text-align: center;
+    }
+    .ediTable td {
+        padding: 6px 3px 6px 3px;
+    }
+    .ediTable th {
+        padding: 6px 3px 6px 3px;
+    }
+    tbody tr td:first-child {
+        padding-left: 6px;
+    }
+}
+@media screen and (max-width: 1100px) {
+    .ediTable {
+        font-size: .9em;
+    }
+    .value {
+        width: 2%;
+        text-align: center;
+    }
+    .ediTable td {
+        padding: 6px 0px 6px 0px;
+    }
+    .ediTable th {
+        padding: 6px 0px 6px 0px;
+    }
+    tbody tr td:first-child {
+        padding-left: 6px;
+    }
+    thead tr th:nth-child(2):before {
+        content: "U";
+    }
+    thead tr th:nth-child(3):before {
+        content: "I";
+    }
+    thead tr th:nth-child(4):before {
+        content: "S";
+    }
+    thead tr th:last-child {
+        border-top-right-radius: 8px;
+        padding-right: 6px;
+    }
+}
+@media screen and (max-width: 860px) {
+    .ediTable {
+        float: left;
+    }
+}
 /* SVG styles */
 
 .axis path,
@@ -117,7 +191,6 @@ thead tr:nth-child(odd) {
     stroke: #666;
     fill: none;
 }
-
 /* Widget styles */
 
 .tooltip {
@@ -134,7 +207,6 @@ thead tr:nth-child(odd) {
     border-radius: 4px;
     pointer-events: none;
 }
-
 /* Button styles */
 
 #clear {
@@ -145,10 +217,10 @@ thead tr:nth-child(odd) {
     float: left;
     width: 96px;
     height: 48px;
-    margin: 10px 30px 30px 134px;
+    margin: 10px 30px 60px 134px;
     text-align: center;
     line-height: 48px;
-    border-radius: 3px;
+    border-radius: 8px;
     font-family: Roboto, Helvetica, Arial;
     font-size: 1.2em;
     background-color: #5799db;

@@ -1,4 +1,5 @@
-name: Your New Jekyll Site
+name: Priority Matrix
+myname: Nick Brown
 markdown: redcarpet
 pygments: true
 baseurl: /priority-matrix

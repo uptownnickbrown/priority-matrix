@@ -1,13 +1,21 @@
-$(document).ready(function () {
+$(document).ready(function() {
     // Wrap the table in a jQuery object, we'll use this multiple places later
     var $table = $('.ediTable');
 
+    // Size the table properly
+    // TODO there's gotta be a way to do this with CSS, right?
+    $table.css('width', window.innerWidth - parseInt($('.livechart').attr('width')) - parseInt($table.css('margin-right')) - 15);
+
+    $(window).resize(function() {
+        $table.css('width', window.innerWidth - parseInt($('.livechart').attr('width')) - parseInt($table.css('margin-right')) - 15);
+    });
+
     // Set up buttons to save and clear table state
-    $('#save').click(function () {
+    $('#save').click(function() {
         localStorage.setItem('ediTable', $table.html());
     });
 
-    $('#clear').click(function () {
+    $('#clear').click(function() {
         localStorage.clear('ediTable');
         location.reload();
     });
@@ -22,7 +30,7 @@ $(document).ready(function () {
 
     // Add a new row to the table when the user clicks on the last row
     // TODO add a button to do this as well
-    $(document).on("focus", '.ediTable tbody tr:last-child', function () {
+    $(document).on("focus", '.ediTable tbody tr:last-child', function() {
         //append the new row here.
         var $table = $(".ediTable");
         $table.append('<tr>\
@@ -41,11 +49,11 @@ $(document).ready(function () {
     }
 
     // Set up function to gather data from the table
-    var getData = function (table) {
+    var getData = function(table) {
         var data = [],
             tableRowSelector = table + ' tbody tr';
 
-        $(tableRowSelector).each(function (index, tr) {
+        $(tableRowSelector).each(function(index, tr) {
             var cells = $(tr).find('td');
             var data_object = {
                 'epic': cells[0].innerHTML,
@@ -66,27 +74,27 @@ $(document).ready(function () {
      * axis - sets up axis
      */
     // setup x 
-    var xValue = function (d) {
+    var xValue = function(d) {
         return d.urgency;
     }, // data -> value
         xScale = d3.scale.linear().range([0, width]), // value -> display
-        xMap = function (d) {
+        xMap = function(d) {
             return xScale(xValue(d));
         }, // data -> display
         xAxis = d3.svg.axis().scale(xScale).orient("bottom");
 
     // setup y
-    var yValue = function (d) {
+    var yValue = function(d) {
         return d.importance;
     }, // data -> value
         yScale = d3.scale.linear().range([height, 0]), // value -> display
-        yMap = function (d) {
+        yMap = function(d) {
             return yScale(yValue(d));
         }, // data -> display
         yAxis = d3.svg.axis().scale(yScale).orient("left");
 
     // setup r
-    var dotSize = function (d) {
+    var dotSize = function(d) {
         return d.size;
     };
 
@@ -195,13 +203,13 @@ $(document).ready(function () {
         .text("interruptions");
 
     // Data object passed in should be an array of objects with .size, .importance and .urgency attributes
-    var initDots = function (data) {
+    var initDots = function(data) {
         var svg = d3.select('svg g');
         svg.selectAll(".dot")
             .data(data)
             .enter().append("circle")
             .attr("class", "dot")
-            .attr("r", function (d) {
+            .attr("r", function(d) {
                 if (d.size === 0) {
                     return 0;
                 } else {
@@ -210,7 +218,7 @@ $(document).ready(function () {
             })
             .attr("cx", xMap)
             .attr("cy", yMap)
-            .style("fill", function (d) {
+            .style("fill", function(d) {
                 var colorCat;
                 // Color task dots by Eisenhower quadrant
                 if (d.urgency < 5 && d.importance < 5) {
@@ -226,7 +234,7 @@ $(document).ready(function () {
             })
             .style("stroke", "none")
         // Fade tooltips in and out on mousein, mouseout
-        .on("mouseover", function (d) {
+        .on("mouseover", function(d) {
             tooltip.transition()
                 .duration(400)
                 .style("opacity", 1);
@@ -234,21 +242,21 @@ $(document).ready(function () {
                 .style("left", (d3.event.pageX + 5) + "px")
                 .style("top", (d3.event.pageY + 5) + "px");
         })
-            .on("mouseout", function (d) {
+            .on("mouseout", function(d) {
                 tooltip.transition()
                     .duration(500)
                     .style("opacity", 0);
             });
     };
 
-    var updateDots = function (data) {
+    var updateDots = function(data) {
         var svg = d3.select('svg g');
         // Get all current dots and transition them to new location/size.
         svg.selectAll(".dot")
             .data(data)
             .transition()
             .duration(350)
-            .attr("r", function (d) {
+            .attr("r", function(d) {
                 if (d.size === 0) {
                     return 0;
                 } else {
@@ -257,7 +265,7 @@ $(document).ready(function () {
             })
             .attr("cx", xMap)
             .attr("cy", yMap)
-            .style("fill", function (d) {
+            .style("fill", function(d) {
                 var colorCat;
                 // Color task dots by Eisenhower quadrant
                 if (d.urgency < 5 && d.importance < 5) {
@@ -276,11 +284,11 @@ $(document).ready(function () {
     initDots(getData('.ediTable'));
 
     // Update dots when table is edited or loses focus
-    $('body').on('focus', '[contenteditable]', function () {
+    $('body').on('focus', '[contenteditable]', function() {
         var $this = $(this);
         $this.data('before', $this.html());
         return $this;
-    }).on('blur keyup paste input', '[contenteditable]', function () {
+    }).on('blur keyup paste input', '[contenteditable]', function() {
         var $this = $(this);
         if ($this.data('before') !== $this.html()) {
             $this.data('before', $this.html());
