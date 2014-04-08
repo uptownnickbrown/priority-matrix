@@ -119,6 +119,63 @@ thead tr th:nth-child(3):before {
 thead tr th:nth-child(4):before {
     content: "Size";
 }
+/* SVG styles */
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+.dot {
+    stroke: #000;
+}
+.axis .domain {
+    stroke: #666;
+}
+.divider .domain {
+    stroke: #666;
+    fill: none;
+}
+/* Widget styles */
+
+.tooltip {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    width: 100px;
+    padding: 5px;
+    font-family: Roboto, Helvetica, Arial;
+    font-size: 14px;
+    background: rgba(87, 153, 219, 0.71);
+    border: 0px;
+    border-radius: 4px;
+    pointer-events: none;
+}
+/* Button styles */
+
+#clear {
+    clear: left;
+}
+#clear,
+#save {
+    float: left;
+    width: 96px;
+    height: 48px;
+    margin: 10px 30px 60px 134px;
+    text-align: center;
+    line-height: 48px;
+    border-radius: 8px;
+    font-family: Roboto, Helvetica, Arial;
+    font-size: 1.2em;
+    background-color: #5799db;
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+/* Media Queries have to come last */
+
 @media screen and (max-width: 1260px) {
     .ediTable {
         font-size: 1em;
@@ -168,63 +225,35 @@ thead tr th:nth-child(4):before {
         padding-right: 6px;
     }
 }
-@media screen and (max-width: 860px) {
+@media screen and (max-width: 900px) {
     .ediTable {
+        float: none;
+        margin: 0px auto;
+        padding-top: 15px;
+        font-size: 1.1em;
+    }
+    #clear {
         float: left;
+        margin: 30px 0 60px 26%;
+    }
+    #save {
+        float: right;
+        margin: 30px 26% 60px 0;
+    }
+    .tooltip {
+        font-size: 12px;
     }
 }
-/* SVG styles */
-
-.axis path,
-.axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
-}
-.dot {
-    stroke: #000;
-}
-.axis .domain {
-    stroke: #666;
-}
-.divider .domain {
-    stroke: #666;
-    fill: none;
-}
-/* Widget styles */
-
-.tooltip {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    text-align: center;
-    width: 100px;
-    padding: 5px;
-    font-family: Roboto, Helvetica, Arial;
-    font-size: 14px;
-    background: #5799db;
-    border: 0px;
-    border-radius: 4px;
-    pointer-events: none;
-}
-/* Button styles */
-
-#clear {
-    clear: left;
-}
-#clear,
-#save {
-    float: left;
-    width: 96px;
-    height: 48px;
-    margin: 10px 30px 60px 134px;
-    text-align: center;
-    line-height: 48px;
-    border-radius: 8px;
-    font-family: Roboto, Helvetica, Arial;
-    font-size: 1.2em;
-    background-color: #5799db;
-    color: #fff;
-    text-transform: uppercase;
-    text-decoration: none;
+@media screen and (max-width: 600px) {
+    #clear {
+        float: left;
+        margin: 30px 0 60px 19%;
+    }
+    #save {
+        float: right;
+        margin: 30px 19% 60px 0;
+    }
+    .ediTable {
+        font-size: .9em;
+    }
 }

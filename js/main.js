@@ -6,13 +6,14 @@ $(document).ready(function () {
         right = 40,
         bottom = 40,
         left = 65,
+        tabletBreak = 900, // Needs to match media query for tablet re-layout
         target = '.chartholder', // selector for parent div of chart
         $table = $('.ediTable'); // jQuery object for the editable table (ediTable...get it?)
 
     // Function to resize table based on window width
     // TODO do this with CSS only
     var resizeTable = function (table) {
-        if (innerWidth > 860) {
+        if (innerWidth > tabletBreak) {
             table.css('width', window.innerWidth - parseInt($('.livechart').attr('width')) - parseInt(table.css('margin-right')) - 15);
         } else {
             table.css('width', '85%');
@@ -204,7 +205,11 @@ $(document).ready(function () {
                 if (d.size === 0) {
                     return 0;
                 } else {
-                    return 4 + d.size * d.size;
+                    if (window.innerWidth > tabletBreak) {
+                        return 4 + d.size * d.size;
+                    } else {
+                        return 4 + d.size * (1.431 * window.innerWidth / 860) * d.size;
+                    }
                 }
             })
             .attr("cx", xMap)
@@ -232,7 +237,8 @@ $(document).ready(function () {
     // Data object passed in should be an array of objects with .size, .importance and .urgency attributes
     // Expects one svg element on the page with one child g element that needs dots updated
     // TODO this is too strict, need to parameterize more
-    var updateDots = function (dots, data) {
+    var updateDots = function (data) {
+        var dots = d3.selectAll('svg g circle');
         dots.data(data)
             .transition()
             .duration(350)
@@ -240,7 +246,11 @@ $(document).ready(function () {
                 if (d.size === 0) {
                     return 0;
                 } else {
-                    return 4 + d.size * d.size;
+                    if (window.innerWidth > tabletBreak) {
+                        return 4 + d.size * d.size;
+                    } else {
+                        return 4 + d.size * (1.431 * window.innerWidth / 860) * d.size;
+                    }
                 }
             })
             .attr("cx", xMap)
@@ -292,9 +302,16 @@ $(document).ready(function () {
             tooltip.transition()
                 .duration(400)
                 .style("opacity", 1);
-            tooltip.html(d.epic + "<br/> (" + xValue(d) + ", " + yValue(d) + ", " + dotSize(d) + ")")
-                .style("left", (d3.event.pageX + 5) + "px")
-                .style("top", (d3.event.pageY + 5) + "px");
+            if (d3.event.toElement.__data__.urgency < 8) {
+                tooltip.html(d.epic + "<br/> (" + xValue(d) + ", " + yValue(d) + ", " + dotSize(d) + ")")
+                    .style("left", (d3.event.pageX + 5) + "px")
+                    .style("top", (d3.event.pageY + 5) + "px");
+            } else {
+                tooltip.html(d.epic + "<br/> (" + xValue(d) + ", " + yValue(d) + ", " + dotSize(d) + ")")
+                    .style("left", (d3.event.pageX - 105) + "px")
+                    .style("top", (d3.event.pageY + 5) + "px");
+            }
+
         })
             .on("mouseout", function (d) {
                 tooltip.transition()
@@ -330,15 +347,23 @@ $(document).ready(function () {
             $this.data('before', $this.html());
             $this.trigger('change');
         }
-        dots = updateDots(dots, getData('.ediTable'));
+        updateDots(getData('.ediTable'));
         return $this;
     });
 
     // Actually do stuff!
+    
+    // Add a placeholder row to the end of the dummy data table on page load
+    newRow($table);
+
+    // If we have a table saved in localStorage, use that instead
+    if (localStorage.getItem('ediTable')) {
+        $table.html(localStorage.getItem('ediTable'));
+    }
 
     // Init chart, return SVG object for main chart building (and updating later)
     var init = function () {
-        if (window.innerWidth < 860) {
+        if (window.innerWidth <= tabletBreak) {
             var svg = initChart(window.innerWidth * .80, window.innerWidth * .80, 30, window.innerWidth * .1, 40, window.innerWidth * .1, target);
         } else {
             var svg = initChart(width, height, top, right, bottom, left, target);
@@ -353,18 +378,10 @@ $(document).ready(function () {
     // TODO there's gotta be a way to do this with CSS, right?
     resizeTable($table);
 
-    // Add a placeholder row to the end of the dummy data table on page load
-    newRow($table);
-
-    // If we have a table saved in localStorage, use that instead
-    if (localStorage.getItem('ediTable')) {
-        $table.html(localStorage.getItem('ediTable'));
-    }
-
     // On window resize, resize the table and chart
     $(window).resize(function (e) {
         resizeTable($table);
-        if (window.innerWidth < 860) {
+        if (window.innerWidth < tabletBreak) {
             resizeChart(window.innerWidth * .80, window.innerWidth * .80, 30, window.innerWidth * .1, 40, window.innerWidth * .1, '.livechart', '.chartholder');
         } else {
             resizeChart(width, height, top, right, bottom, left, '.livechart', '.chartholder');
