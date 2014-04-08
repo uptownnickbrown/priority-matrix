@@ -42,10 +42,8 @@ $(document).ready(function () {
 
     // Set up function to gather data from the table
     var getData = function (table) {
-        console.log(table);
         var data = [],
             tableRowSelector = table + ' tbody tr';
-        console.log(tableRowSelector);
 
         $(tableRowSelector).each(function (index, tr) {
             var cells = $(tr).find('td');
@@ -197,11 +195,8 @@ $(document).ready(function () {
         .text("interruptions");
 
     // Data object passed in should be an array of objects with .size, .importance and .urgency attributes
-    var drawDots = function (data) {
+    var initDots = function (data) {
         var svg = d3.select('svg g');
-        // Remove all previous dots to properly redraw
-        // TODO change this to an animation instead of wipe/redraw
-        svg.selectAll(".dot").remove();
         svg.selectAll(".dot")
             .data(data)
             .enter().append("circle")
@@ -246,9 +241,41 @@ $(document).ready(function () {
             });
     };
 
-    drawDots(getData('.ediTable'));
+    var updateDots = function (data) {
+        var svg = d3.select('svg g');
+        // Get all current dots and transition them to new location/size.
+        svg.selectAll(".dot")
+            .data(data)
+            .transition()
+            .duration(350)
+            .attr("r", function (d) {
+                if (d.size === 0) {
+                    return 0;
+                } else {
+                    return 4 + d.size * d.size;
+                }
+            })
+            .attr("cx", xMap)
+            .attr("cy", yMap)
+            .style("fill", function (d) {
+                var colorCat;
+                // Color task dots by Eisenhower quadrant
+                if (d.urgency < 5 && d.importance < 5) {
+                    colorCat = "#fa2121";
+                } else if (d.urgency >= 5 && d.importance <= 5) {
+                    colorCat = "#ffff8e";
+                } else if (d.urgency > 5 && d.importance > 5) {
+                    colorCat = "#2c812c";
+                } else {
+                    colorCat = "#3f3fbf";
+                }
+                return colorCat;
+            })
+    };
 
-    // Redraw dots when table is edited or loses focus
+    initDots(getData('.ediTable'));
+
+    // Update dots when table is edited or loses focus
     $('body').on('focus', '[contenteditable]', function () {
         var $this = $(this);
         $this.data('before', $this.html());
@@ -259,7 +286,7 @@ $(document).ready(function () {
             $this.data('before', $this.html());
             $this.trigger('change');
         }
-        drawDots(getData('.ediTable'));
+        updateDots(getData('.ediTable'));
         return $this;
     });
 });
