@@ -257,3 +257,16 @@ thead tr th:nth-child(4):before {
         font-size: .9em;
     }
 }
+
+@media screen and (max-width: 420px) {
+    h1 {
+        font-size: 2.4em;
+        line-height: 40px;
+    }
+    h3 {
+        font-size: 1em;
+    }
+    header {
+        height: 70px;
+    }
+}

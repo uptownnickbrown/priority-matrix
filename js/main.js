@@ -364,7 +364,7 @@ $(document).ready(function () {
     // Init chart, return SVG object for main chart building (and updating later)
     var init = function () {
         if (window.innerWidth <= tabletBreak) {
-            var svg = initChart(window.innerWidth * .80, window.innerWidth * .80, 30, window.innerWidth * .1, 40, window.innerWidth * .1, target);
+            var svg = initChart(window.innerWidth * .78, window.innerWidth * .78, 30, window.innerWidth * .1, 40, window.innerWidth * .12, target);
         } else {
             var svg = initChart(width, height, top, right, bottom, left, target);
         }
