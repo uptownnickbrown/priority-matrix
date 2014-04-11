@@ -80,15 +80,15 @@ $(document).ready(function () {
 
         // Populate new rows based on data object
         data.forEach(function (row, i) {
-            newRow($table,row.epic,row.urgency,row.importance,row.size);
+            newRow($table, row.epic, row.urgency, row.importance, row.size);
         });
-        
+
         // Add "insert new data here row"
         newRow($table);
 
         return data;
     };
-    
+
     var clearDataTable = function (table, data) {
         var tableBody = table + ' tbody',
             $table = $(table);
@@ -97,11 +97,6 @@ $(document).ready(function () {
         $tableBody = $(tableBody);
         $tableBody.children().remove();
 
-        // Populate new rows based on data object
-        data.forEach(function (row, i) {
-            newRow($table,row.epic,row.urgency,row.importance,row.size);
-        });
-        
         // Add "insert new data here row"
         newRow($table);
 
@@ -414,7 +409,11 @@ $(document).ready(function () {
 
     $('#clear').click(function () {
         localStorage.clear('ediTable');
-        location.reload();
+        clearDataTable('.ediTable');
+        var dots = d3.selectAll('svg g circle');
+        dots.remove();
+        var dots = initDots(getDataFromTable('.ediTable'));
+        tooltipEvents(dots);
     });
 
     $('#import').click(function () {
@@ -427,9 +426,8 @@ $(document).ready(function () {
                 size: +d.Size // convert "Length" column to number
             };
         }, function (error, rows) {
-            console.log(rows);
-            updateDots(rows);
             pushDataToTable('.ediTable', rows);
+            updateDots(rows);
         });
     });
 
@@ -459,8 +457,8 @@ $(document).ready(function () {
     } else {
         // TODO If we don't have a table in localStorage, on initial page load, load sample-data.csv
     }
-    
-    
+
+
 
     // Init chart, return SVG object for main chart building (and updating later)
     var init = function () {
