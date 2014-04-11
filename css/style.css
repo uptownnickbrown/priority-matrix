@@ -158,12 +158,10 @@ thead tr th:nth-child(4):before {
 #clear {
     clear: left;
 }
-#clear,
-#save, #import, #export {
-    float: left;
+
+.button {
     width: 96px;
     height: 48px;
-    margin: 10px 30px 60px 134px;
     text-align: center;
     line-height: 48px;
     border-radius: 8px;
@@ -174,6 +172,18 @@ thead tr th:nth-child(4):before {
     text-transform: uppercase;
     text-decoration: none;
 }
+
+#clear,
+#save {
+    float: left;
+    margin: 10px 30px 60px 134px;
+}
+
+#import, #export {
+    float: right;
+    margin: 10px 0px 60px 30px;
+};
+
 /* Media Queries have to come last */
 
 @media screen and (max-width: 1260px) {

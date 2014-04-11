@@ -14,8 +14,11 @@ $(document).ready(function () {
     // Function to resize table based on window width
     // TODO do this with CSS only
     var resizeTable = function (table) {
-        if (innerWidth > tabletBreak) {
-            table.css('width', window.innerWidth - parseInt($('.livechart').attr('width')) - parseInt(table.css('margin-right')) - 15);
+        if (window.innerWidth > tabletBreak) {
+            var tableWidth = window.innerWidth - parseInt($('.livechart').attr('width')) - parseInt(table.css('margin-right')) - 15;
+            table.css('width', tableWidth);
+            $('#export').css('margin-right', (tableWidth / 4) - 24);
+            $('#import').css('margin-right', (tableWidth / 2) - 96);
         } else {
             table.css('width', '85%');
         }
@@ -358,7 +361,6 @@ $(document).ready(function () {
         newDot();
     };
 
-
     var deleteRow = function ($table) {
         // TODO let users delete rows somehow
     };
@@ -417,7 +419,6 @@ $(document).ready(function () {
     });
 
     $('#import').click(function () {
-        console.log('import clicked');
         d3.csv("epics.csv", function (d) {
             return {
                 epic: d.Epic,
@@ -429,6 +430,23 @@ $(document).ready(function () {
             pushDataToTable('.ediTable', rows);
             updateDots(rows);
         });
+    });
+
+    $('#sample').click(function () {
+        // Load sample-data.csv for demo purposes
+        d3.csv("sample-data.csv", function (d) {
+            return {
+                epic: d.Epic,
+                urgency: +d.Urgency,
+                importance: +d.Importance,
+                size: +d.Size // convert "Length" column to number
+            };
+        }, function (error, rows) {
+            pushDataToTable('.ediTable', rows);
+            updateDots(getDataFromTable('.ediTable'));
+            console.log("sample-data.csv pushed to table");
+        });
+        console.log("loaded from sample-data.csv");
     });
 
     // Update dots when table is edited or loses focus
@@ -448,18 +466,14 @@ $(document).ready(function () {
 
     // Actually do stuff!
 
-    // Add a placeholder row to the end of the dummy data table on page load
-    newRow($table);
-
-    // If we have a table saved in localStorage, use that instead
+    // If we have a table saved in localStorage, use that
     if (localStorage.getItem('ediTable')) {
         $table.html(localStorage.getItem('ediTable'));
+        updateDots(getDataFromTable('.ediTable'));
+        console.log("loaded from local storage")
     } else {
-        // TODO If we don't have a table in localStorage, on initial page load, load sample-data.csv
+        newRow($table);
     }
-
-
-
     // Init chart, return SVG object for main chart building (and updating later)
     var init = function () {
         if (window.innerWidth <= tabletBreak) {
@@ -472,7 +486,6 @@ $(document).ready(function () {
     }
 
     init();
-
     // Once the chart is on the page, we can size the table appropriately to sit next to it
     // TODO there's gotta be a way to do this with CSS, right?
     resizeTable($table);
