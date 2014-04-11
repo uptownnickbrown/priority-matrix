@@ -272,6 +272,37 @@ $(document).ready(function () {
         return svg.selectAll(".dot");
     };
 
+    var newDot = function () {
+        var svg = d3.select('svg g');
+        svg.append("circle")
+            .attr("class", "dot")
+            .attr("r", 0)
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .style("fill", "#fff")
+            .style("stroke", "none").on("mouseover", function (d) {
+                tooltip.transition()
+                    .duration(400)
+                    .style("opacity", 1);
+                if (d3.event.toElement.__data__.urgency < 8) {
+                    tooltip.html(d.epic + "<br/> (" + xValue(d) + ", " + yValue(d) + ", " + dotSize(d) + ")")
+                        .style("left", (d3.event.pageX + 5) + "px")
+                        .style("top", (d3.event.pageY + 5) + "px");
+                } else {
+                    tooltip.html(d.epic + "<br/> (" + xValue(d) + ", " + yValue(d) + ", " + dotSize(d) + ")")
+                        .style("left", (d3.event.pageX - 105) + "px")
+                        .style("top", (d3.event.pageY + 5) + "px");
+                }
+
+            })
+            .on("mouseout", function (d) {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+
+    };
+
     // Function to Get all current dots and transition them to new location/size.
     // Data object passed in should be an array of objects with .size, .importance and .urgency attributes
     // Expects one svg element on the page with one child g element that needs dots updated
@@ -329,6 +360,7 @@ $(document).ready(function () {
                 <td class="value" contenteditable="true">0</td>\
                 </tr>');
         }
+        newDot();
     };
 
 
