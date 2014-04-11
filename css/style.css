@@ -159,7 +159,7 @@ thead tr th:nth-child(4):before {
     clear: left;
 }
 #clear,
-#save {
+#save, #import, #export {
     float: left;
     width: 96px;
     height: 48px;

@@ -8,7 +8,8 @@ $(document).ready(function () {
         left = 65,
         tabletBreak = 900, // Needs to match media query for tablet re-layout
         target = '.chartholder', // selector for parent div of chart
-        $table = $('.ediTable'); // jQuery object for the editable table (ediTable...get it?)
+        $table = $('.ediTable'), // jQuery object for the editable table (ediTable...get it?)
+        dataGlobal;
 
     // Function to resize table based on window width
     // TODO do this with CSS only
@@ -52,7 +53,7 @@ $(document).ready(function () {
 
     // Function to gather data from the ediTable
     // TODO use a csv parser instead of hard-coding
-    var getData = function (table) {
+    var getDataFromTable = function (table) {
         var data = [],
             tableRowSelector = table + ' tbody tr';
 
@@ -66,6 +67,44 @@ $(document).ready(function () {
             };
             data.push(data_object);
         });
+        return data;
+    };
+
+    var pushDataToTable = function (table, data) {
+        var tableBody = table + ' tbody',
+            $table = $(table);
+
+        // Remove all current table rows
+        $tableBody = $(tableBody);
+        $tableBody.children().remove();
+
+        // Populate new rows based on data object
+        data.forEach(function (row, i) {
+            newRow($table,row.epic,row.urgency,row.importance,row.size);
+        });
+        
+        // Add "insert new data here row"
+        newRow($table);
+
+        return data;
+    };
+    
+    var clearDataTable = function (table, data) {
+        var tableBody = table + ' tbody',
+            $table = $(table);
+
+        // Remove all current table rows
+        $tableBody = $(tableBody);
+        $tableBody.children().remove();
+
+        // Populate new rows based on data object
+        data.forEach(function (row, i) {
+            newRow($table,row.epic,row.urgency,row.importance,row.size);
+        });
+        
+        // Add "insert new data here row"
+        newRow($table);
+
         return data;
     };
 
@@ -273,13 +312,23 @@ $(document).ready(function () {
     };
 
     // Function to add a new row to the table
-    var newRow = function ($table) {
-        $table.append('<tr>\
+    // e, u, i, s are optional parameters to create a new row with real data
+    var newRow = function ($table, e, u, i, s) {
+        if (e) {
+            $table.append('<tr>\
+                <td class="epic" contenteditable="true">' + e + '</td>\
+                <td class="value" contenteditable="true">' + u + '</td>\
+                <td class="value" contenteditable="true">' + i + '</td>\
+                <td class="value" contenteditable="true">' + s + '</td>\
+                </tr>');
+        } else {
+            $table.append('<tr>\
                 <td class="epic" contenteditable="true">Add new task here...</td>\
                 <td class="value" contenteditable="true">0</td>\
                 <td class="value" contenteditable="true">0</td>\
                 <td class="value" contenteditable="true">0</td>\
                 </tr>');
+        }
     };
 
 
@@ -336,6 +385,22 @@ $(document).ready(function () {
         location.reload();
     });
 
+    $('#import').click(function () {
+        console.log('import clicked');
+        d3.csv("epics.csv", function (d) {
+            return {
+                epic: d.Epic,
+                urgency: +d.Urgency,
+                importance: +d.Importance,
+                size: +d.Size // convert "Length" column to number
+            };
+        }, function (error, rows) {
+            console.log(rows);
+            updateDots(rows);
+            pushDataToTable('.ediTable', rows);
+        });
+    });
+
     // Update dots when table is edited or loses focus
     $('body').on('focus', '[contenteditable]', function () {
         var $this = $(this);
@@ -347,19 +412,23 @@ $(document).ready(function () {
             $this.data('before', $this.html());
             $this.trigger('change');
         }
-        updateDots(getData('.ediTable'));
+        updateDots(getDataFromTable('.ediTable'));
         return $this;
     });
 
     // Actually do stuff!
-    
+
     // Add a placeholder row to the end of the dummy data table on page load
     newRow($table);
 
     // If we have a table saved in localStorage, use that instead
     if (localStorage.getItem('ediTable')) {
         $table.html(localStorage.getItem('ediTable'));
+    } else {
+        // TODO If we don't have a table in localStorage, on initial page load, load sample-data.csv
     }
+    
+    
 
     // Init chart, return SVG object for main chart building (and updating later)
     var init = function () {
@@ -368,7 +437,7 @@ $(document).ready(function () {
         } else {
             var svg = initChart(width, height, top, right, bottom, left, target);
         }
-        var dots = initDots(getData('.ediTable'));
+        var dots = initDots(getDataFromTable('.ediTable'));
         tooltipEvents(dots);
     }
 
