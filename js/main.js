@@ -7,6 +7,7 @@ $(document).ready(function () {
         bottom = 40,
         left = 65,
         tabletBreak = 900, // Needs to match media query for tablet re-layout
+        minWidth = 320, // Needs to match min-width in CSS on mainContainer
         target = '.chartholder', // selector for parent div of chart
         $table = $('.ediTable'), // jQuery object for the editable table (ediTable...get it?)
         dataGlobal;
@@ -17,9 +18,11 @@ $(document).ready(function () {
         if (window.innerWidth > tabletBreak) {
             var tableWidth = window.innerWidth - parseInt($('.livechart').attr('width')) - parseInt(table.css('margin-right')) - 15;
             table.css('width', tableWidth);
-            $('#export').css('margin-right', (tableWidth / 4) - 24);
+            $('#export').css('margin-right', 30 + (tableWidth / 4 ) - 48); // margin to right of table + 1/4 of 
             $('#import').css('margin-right', (tableWidth / 2) - 96);
         } else {
+            $('#export').css('margin-right','');
+            $('#import').css('margin-right','');
             table.css('width', '85%');
         }
     }
@@ -109,7 +112,7 @@ $(document).ready(function () {
     // Function to set up initial SVG
     var initChart = function (width, height, top, right, bottom, left, target) {
         // Insert the graph canvas before the element that matches the target selector
-        var svg = d3.select("body").insert("svg", target)
+        var svg = d3.select(target).insert("svg", target)
             .attr("width", width + left + right)
             .attr("height", height + top + bottom)
             .attr("class", "livechart")
@@ -369,7 +372,7 @@ $(document).ready(function () {
     // Add event handlers and widget support elements
 
     // add the tooltip area to the webpage
-    var tooltip = d3.select("body").append("div")
+    var tooltip = d3.select(target).append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
 
@@ -493,10 +496,10 @@ $(document).ready(function () {
     // On window resize, resize the table and chart
     $(window).resize(function (e) {
         resizeTable($table);
-        if (window.innerWidth < tabletBreak) {
-            resizeChart(window.innerWidth * .80, window.innerWidth * .80, 30, window.innerWidth * .1, 40, window.innerWidth * .1, '.livechart', '.chartholder');
-        } else {
+        if (window.innerWidth > tabletBreak) {
             resizeChart(width, height, top, right, bottom, left, '.livechart', '.chartholder');
+        } else if (window.innerWidth > minWidth) {
+            resizeChart(window.innerWidth * .80, window.innerWidth * .80, 30, window.innerWidth * .1, 40, window.innerWidth * .1, '.livechart', '.chartholder');
         }
     });
 

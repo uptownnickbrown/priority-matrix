@@ -6,18 +6,24 @@ body {
     color: #333;
     margin: 0;
 }
+
+.mainContainer {
+    width:100%;
+    min-width:320px;   
+}
 header {
     width: 100%;
     height: 90px;
     background-color: #5799db;
     clear: both;
+    min-width:320px
 }
 .livechart {
     float: left;
 }
 .ediTable {
     float: right;
-    margin: 30px 30px 60px 0px;
+    margin: 30px 30px 30px 0px;
     font-family: Roboto, Helvetica, Arial;
     font-size: 1.1em;
     border-spacing: 0px;
@@ -181,7 +187,7 @@ thead tr th:nth-child(4):before {
 
 #import, #export {
     float: right;
-    margin: 10px 0px 60px 30px;
+    margin: 10px 0px 60px 0px;
 };
 
 /* Media Queries have to come last */
@@ -244,25 +250,45 @@ thead tr th:nth-child(4):before {
     }
     #clear {
         float: left;
-        margin: 30px 0 60px 26%;
+        margin: 0px 0 60px 26%;
     }
     #save {
         float: right;
-        margin: 30px 26% 60px 0;
+        margin: 0px 26% 60px 0;
+    }
+    #import {
+        float: left;
+        margin: 30px 0 30px 26%;
+    }   
+    #export {
+        float: right;
+        margin: 30px 26% 30px 0;
     }
     .tooltip {
         font-size: 12px;
     }
+    
+    
 }
 @media screen and (max-width: 600px) {
     #clear {
         float: left;
-        margin: 30px 0 60px 19%;
+        margin: 0px 0 60px 18%;
     }
     #save {
         float: right;
-        margin: 30px 19% 60px 0;
+        margin: 0px 18% 60px 0;
     }
+    #import {
+        float: left;
+        margin: 30px 0 30px 18%;
+    }   
+    #export {
+        float: right;
+        margin: 30px 18% 30px 0;
+    }
+    
+    
     .ediTable {
         font-size: .9em;
     }
