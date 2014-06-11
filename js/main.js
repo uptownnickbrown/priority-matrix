@@ -18,13 +18,34 @@ $(document).ready(function () {
         if (window.innerWidth > tabletBreak) {
             var tableWidth = window.innerWidth - parseInt($('.livechart').attr('width')) - parseInt(table.css('margin-right')) - 15;
             table.css('width', tableWidth);
-            $('#export').css('margin-right', 30 + (tableWidth / 4 ) - 48); // margin to right of table + 1/4 of 
+            $('#export').css('margin-right', 30 + (tableWidth / 4) - 48); // margin to right of table + 1/4 of 
             $('#import').css('margin-right', (tableWidth / 2) - 96);
         } else {
-            $('#export').css('margin-right','');
-            $('#import').css('margin-right','');
+            $('#export').css('margin-right', '');
+            $('#import').css('margin-right', '');
             table.css('width', '85%');
         }
+    }
+
+    var tableEvents = function () {
+        // Set up event handlers on the chart to improve contentEditable
+        $('td').on('click', function () {
+            var $this = $(this);
+            if ($this.hasClass('selected')) {
+                console.log('already selected');
+            } else {
+                document.execCommand('selectAll', false, null);
+                $this.addClass('selected');
+                $this.on('blur', function () {
+                    $(this).removeClass('selected');
+                });
+            }
+        });
+        $('td').keydown(function(objEvent) {
+        if (objEvent.keyCode == 9) {  //tab pressed
+            objEvent.preventDefault(); // stops its action
+            }
+        })
     }
 
     // d3 Utility Functions
@@ -362,6 +383,7 @@ $(document).ready(function () {
                 </tr>');
         }
         newDot();
+        tableEvents();
     };
 
     var deleteRow = function ($table) {
@@ -457,9 +479,14 @@ $(document).ready(function () {
         $table.html(localStorage.getItem('ediTable'));
         updateDots(getDataFromTable('.ediTable'));
         console.log("loaded from local storage")
+        // Set up event handlers on the chart to improve contentEditable
+        tableEvents();
     } else {
         newRow($table);
+        // Set up event handlers on the chart to improve contentEditable
+        tableEvents();
     }
+
     // Init chart, return SVG object for main chart building (and updating later)
     var init = function () {
         if (window.innerWidth <= tabletBreak) {
