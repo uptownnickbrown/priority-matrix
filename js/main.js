@@ -29,27 +29,41 @@ $(document).ready(function () {
 
     var tableEvents = function () {
         // Set up event handlers on the chart to improve contentEditable
-        $('td').off().on('click', function () {
-            var $this = $(this);
-            if (!($this.hasClass('selected'))) {
-                document.execCommand('selectAll', false, null);
-                $this.addClass('selected');
-                $this.on('blur', function () {
-                    $(this).removeClass('selected');
-                });
-            }
-        }).keydown(function (objEvent) {
-            var $this = $(this);
-            if(objEvent.shiftKey && objEvent.keyCode == 9) { 
-                objEvent.preventDefault();
-                $this.prev('td').focus();
-                document.execCommand('selectAll', false, null);
-            } else if (objEvent.keyCode == 9) {
-                objEvent.preventDefault();
-                $this.next('td').focus();
-                document.execCommand('selectAll', false, null);
-            }
-        });
+        $('td')
+            .off()
+            .on('click', function () {
+                var $this = $(this);
+                if (!($this.hasClass('selected'))) {
+                    document.execCommand('selectAll', false, null);
+                    $this.addClass('selected');
+                    $this.on('blur', function () {
+                        $(this).removeClass('selected');
+                    });
+                }
+            })
+            .keydown(function (objEvent) {
+                var $this = $(this);
+                if(objEvent.shiftKey && objEvent.keyCode == 9) { 
+                    objEvent.preventDefault();
+                    $this.prev('td').focus();
+                    document.execCommand('selectAll', false, null);
+                } else if (objEvent.keyCode == 9) {
+                    objEvent.preventDefault();
+                    $this.next('td').focus();
+                    document.execCommand('selectAll', false, null);
+                }
+            })
+            .keydown(function (objEvent) {
+                var $this = $(this),
+                    col = $this.parent().children().index($this) + 1, // 1-index these because nth-child() is 1-indexed
+                    row = $this.parent().parent().children().index($this.parent()) + 1, 
+                    newRow = row + 1;
+                if(objEvent.keyCode == 13) { 
+                    objEvent.preventDefault();
+                    $('tr:nth-child(' + newRow + ') td:nth-child(' + col + ')').focus();
+                    document.execCommand('selectAll', false, null);
+                }
+            });
     }
 
     // d3 Utility Functions
