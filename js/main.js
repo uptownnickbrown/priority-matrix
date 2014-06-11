@@ -29,23 +29,27 @@ $(document).ready(function () {
 
     var tableEvents = function () {
         // Set up event handlers on the chart to improve contentEditable
-        $('td').on('click', function () {
+        $('td').off().on('click', function () {
             var $this = $(this);
-            if ($this.hasClass('selected')) {
-                console.log('already selected');
-            } else {
+            if (!($this.hasClass('selected'))) {
                 document.execCommand('selectAll', false, null);
                 $this.addClass('selected');
                 $this.on('blur', function () {
                     $(this).removeClass('selected');
                 });
             }
-        });
-        $('td').keydown(function(objEvent) {
-        if (objEvent.keyCode == 9) {  //tab pressed
-            objEvent.preventDefault(); // stops its action
+        }).keydown(function (objEvent) {
+            var $this = $(this);
+            if(objEvent.shiftKey && objEvent.keyCode == 9) { 
+                objEvent.preventDefault();
+                $this.prev('td').focus();
+                document.execCommand('selectAll', false, null);
+            } else if (objEvent.keyCode == 9) {
+                objEvent.preventDefault();
+                $this.next('td').focus();
+                document.execCommand('selectAll', false, null);
             }
-        })
+        });
     }
 
     // d3 Utility Functions
@@ -479,12 +483,9 @@ $(document).ready(function () {
         $table.html(localStorage.getItem('ediTable'));
         updateDots(getDataFromTable('.ediTable'));
         console.log("loaded from local storage")
-        // Set up event handlers on the chart to improve contentEditable
         tableEvents();
     } else {
         newRow($table);
-        // Set up event handlers on the chart to improve contentEditable
-        tableEvents();
     }
 
     // Init chart, return SVG object for main chart building (and updating later)
