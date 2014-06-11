@@ -193,6 +193,8 @@ thead tr th:nth-child(4):before {
 
 #export {
     clear: right;
+    background: #666;
+    cursor: default;
 }
 
 /* Media Queries have to come last */
