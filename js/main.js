@@ -422,7 +422,7 @@ $(document).ready(function () {
     });
 
     $('#import').click(function () {
-        d3.csv("epics.csv", function (d) {
+        d3.csv("sample-data.csv", function (d) {
             return {
                 epic: d.Epic,
                 urgency: +d.Urgency,
@@ -433,23 +433,6 @@ $(document).ready(function () {
             pushDataToTable('.ediTable', rows);
             updateDots(rows);
         });
-    });
-
-    $('#sample').click(function () {
-        // Load sample-data.csv for demo purposes
-        d3.csv("sample-data.csv", function (d) {
-            return {
-                epic: d.Epic,
-                urgency: +d.Urgency,
-                importance: +d.Importance,
-                size: +d.Size // convert "Length" column to number
-            };
-        }, function (error, rows) {
-            pushDataToTable('.ediTable', rows);
-            updateDots(getDataFromTable('.ediTable'));
-            console.log("sample-data.csv pushed to table");
-        });
-        console.log("loaded from sample-data.csv");
     });
 
     // Update dots when table is edited or loses focus
