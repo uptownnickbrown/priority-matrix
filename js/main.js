@@ -18,13 +18,72 @@ $(document).ready(function () {
         if (window.innerWidth > tabletBreak) {
             var tableWidth = window.innerWidth - parseInt($('.livechart').attr('width')) - parseInt(table.css('margin-right')) - 15;
             table.css('width', tableWidth);
-            $('#export').css('margin-right', 30 + (tableWidth / 4 ) - 48); // margin to right of table + 1/4 of 
+            $('#export').css('margin-right', 30 + (tableWidth / 4) - 48); // margin to right of table + 1/4 of 
             $('#import').css('margin-right', (tableWidth / 2) - 96);
         } else {
-            $('#export').css('margin-right','');
-            $('#import').css('margin-right','');
+            $('#export').css('margin-right', '');
+            $('#import').css('margin-right', '');
             table.css('width', '85%');
         }
+    }
+
+    var tableEvents = function () {
+        // Set up event handlers on the chart to improve contentEditable
+        $('td')
+            .off()
+            .on('click', function () {
+                var $this = $(this);
+                if (!($this.hasClass('selected'))) {
+                    document.execCommand('selectAll', false, null);
+                    $this.addClass('selected');
+                    $this.on('blur', function () {
+                        $(this).removeClass('selected');
+                    });
+                }
+            })
+            .keydown(function (objEvent) {
+                var $this = $(this),
+                    col = $this.parent().children().index($this) + 1, // 1-index these because nth-child() is 1-indexed
+                    row = $this.parent().parent().children().index($this.parent()) + 1,
+                    prevRow = row - 1,
+                    nextRow = row + 1;
+                
+                if (objEvent.shiftKey && objEvent.keyCode == 9) {
+                    objEvent.preventDefault();
+                    if (col == 1 && prevRow > 0) {
+                        $('tr:nth-child(' + prevRow + ') td:nth-child(4)').focus();
+                    } else {
+                        $this.prev('td').focus();
+                    }
+                    $this.prev('td').focus();
+                    document.execCommand('selectAll', false, null);
+                } else if (objEvent.keyCode == 9) {
+                    objEvent.preventDefault();
+                    if (col == 4) {
+                        $('tr:nth-child(' + nextRow + ') td:nth-child(1)').focus();
+                    } else {
+                        $this.next('td').focus();
+                    }
+                    document.execCommand('selectAll', false, null);
+                }
+            })
+            .keydown(function (objEvent) {
+                var $this = $(this),
+                    col = $this.parent().children().index($this) + 1, // 1-index these because nth-child() is 1-indexed
+                    row = $this.parent().parent().children().index($this.parent()) + 1,
+                    prevRow = row - 1,
+                    nextRow = row + 1;
+                
+                if (objEvent.shiftKey && objEvent.keyCode == 13) {
+                    objEvent.preventDefault();
+                    $('tr:nth-child(' + prevRow + ') td:nth-child(' + col + ')').focus();
+                    document.execCommand('selectAll', false, null);
+                } else if (objEvent.keyCode == 13) {
+                    objEvent.preventDefault();
+                    $('tr:nth-child(' + nextRow + ') td:nth-child(' + col + ')').focus();
+                    document.execCommand('selectAll', false, null);
+                }
+            });
     }
 
     // d3 Utility Functions
@@ -362,6 +421,7 @@ $(document).ready(function () {
                 </tr>');
         }
         newDot();
+        tableEvents();
     };
 
     var deleteRow = function ($table) {
@@ -457,9 +517,11 @@ $(document).ready(function () {
         $table.html(localStorage.getItem('ediTable'));
         updateDots(getDataFromTable('.ediTable'));
         console.log("loaded from local storage")
+        tableEvents();
     } else {
         newRow($table);
     }
+
     // Init chart, return SVG object for main chart building (and updating later)
     var init = function () {
         if (window.innerWidth <= tabletBreak) {
