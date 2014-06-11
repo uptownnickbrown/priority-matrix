@@ -47,7 +47,7 @@ $(document).ready(function () {
                     row = $this.parent().parent().children().index($this.parent()) + 1,
                     prevRow = row - 1,
                     nextRow = row + 1;
-                
+
                 if (objEvent.shiftKey && objEvent.keyCode == 9) {
                     objEvent.preventDefault();
                     if (col == 1 && prevRow > 0) {
@@ -73,7 +73,7 @@ $(document).ready(function () {
                     row = $this.parent().parent().children().index($this.parent()) + 1,
                     prevRow = row - 1,
                     nextRow = row + 1;
-                
+
                 if (objEvent.shiftKey && objEvent.keyCode == 13) {
                     objEvent.preventDefault();
                     $('tr:nth-child(' + prevRow + ') td:nth-child(' + col + ')').focus();
@@ -116,6 +116,11 @@ $(document).ready(function () {
         return d.size;
     };
 
+    // Random number between two values
+    function getRandomMinMax(min, max) {
+        return Math.round( (Math.random() * (max - min) + min) * 10 ) / 10;
+    }
+    
     // Function to gather data from the ediTable
     // TODO use a csv parser instead of hard-coding
     var getDataFromTable = function (table) {
@@ -415,13 +420,14 @@ $(document).ready(function () {
         } else {
             $table.append('<tr>\
                 <td class="epic" contenteditable="true">Add new task here...</td>\
-                <td class="value" contenteditable="true">0</td>\
-                <td class="value" contenteditable="true">0</td>\
-                <td class="value" contenteditable="true">0</td>\
+                <td class="value" contenteditable="true">' + getRandomMinMax(0, 10) + '</td>\
+                <td class="value" contenteditable="true">' + getRandomMinMax(0, 10) + '</td>\
+                <td class="value" contenteditable="true">' + getRandomMinMax(0, 5) + '</td>\
                 </tr>');
         }
         newDot();
         tableEvents();
+        updateDots(getDataFromTable('.ediTable'));
     };
 
     var deleteRow = function ($table) {

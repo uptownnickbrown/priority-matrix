@@ -34,6 +34,7 @@ footer {
     width: 100%;
     position: fixed;
     bottom: 0px;
+    border-top: 2px solid white;
 }
 /* Typography */
 
