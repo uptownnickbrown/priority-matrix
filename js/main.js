@@ -42,25 +42,45 @@ $(document).ready(function () {
                 }
             })
             .keydown(function (objEvent) {
-                var $this = $(this);
-                if(objEvent.shiftKey && objEvent.keyCode == 9) { 
+                var $this = $(this),
+                    col = $this.parent().children().index($this) + 1, // 1-index these because nth-child() is 1-indexed
+                    row = $this.parent().parent().children().index($this.parent()) + 1,
+                    prevRow = row - 1,
+                    nextRow = row + 1;
+                
+                if (objEvent.shiftKey && objEvent.keyCode == 9) {
                     objEvent.preventDefault();
+                    if (col == 1 && prevRow > 0) {
+                        $('tr:nth-child(' + prevRow + ') td:nth-child(4)').focus();
+                    } else {
+                        $this.prev('td').focus();
+                    }
                     $this.prev('td').focus();
                     document.execCommand('selectAll', false, null);
                 } else if (objEvent.keyCode == 9) {
                     objEvent.preventDefault();
-                    $this.next('td').focus();
+                    if (col == 4) {
+                        $('tr:nth-child(' + nextRow + ') td:nth-child(1)').focus();
+                    } else {
+                        $this.next('td').focus();
+                    }
                     document.execCommand('selectAll', false, null);
                 }
             })
             .keydown(function (objEvent) {
                 var $this = $(this),
                     col = $this.parent().children().index($this) + 1, // 1-index these because nth-child() is 1-indexed
-                    row = $this.parent().parent().children().index($this.parent()) + 1, 
-                    newRow = row + 1;
-                if(objEvent.keyCode == 13) { 
+                    row = $this.parent().parent().children().index($this.parent()) + 1,
+                    prevRow = row - 1,
+                    nextRow = row + 1;
+                
+                if (objEvent.shiftKey && objEvent.keyCode == 13) {
                     objEvent.preventDefault();
-                    $('tr:nth-child(' + newRow + ') td:nth-child(' + col + ')').focus();
+                    $('tr:nth-child(' + prevRow + ') td:nth-child(' + col + ')').focus();
+                    document.execCommand('selectAll', false, null);
+                } else if (objEvent.keyCode == 13) {
+                    objEvent.preventDefault();
+                    $('tr:nth-child(' + nextRow + ') td:nth-child(' + col + ')').focus();
                     document.execCommand('selectAll', false, null);
                 }
             });
